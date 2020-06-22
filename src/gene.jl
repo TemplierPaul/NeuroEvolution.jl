@@ -1,3 +1,5 @@
+export Gene
+
 mutable struct Gene
     inno_nb::Integer
     origin::Float64

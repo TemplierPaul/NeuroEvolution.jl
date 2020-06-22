@@ -1,21 +1,23 @@
+export NEATIndiv
+
 mutable struct NEATIndiv <: Cambrian.Individual
     genes::Array{Gene}
     fitness::Array{Float64}
-    neurons::Array{Float64}
+    neuron_pos::Array{Float64}
 end
 
-function NEATIndiv(cfg:Dict)
+function NEATIndiv(cfg::Dict)
     n_in = cfg["n_in"]
     n_out = cfg["n_out"]
-    neurons::Array{Float64}=[]
+    neuron_pos::Array{Float64}=[]
 
     # Input neurons
     for i in 1:n_in
-        push!(neurons, Neuron(-1.0*i, activation, 0, 0))
+        push!(neuron_pos, -i)
     end
     # Output neurons
     for i in 1:n_out
-        push!(neurons, Neuron(-1.0*i, activation, 0, 0))
+        push!(neuron_pos, 1+i)
     end
 
     # Add genes
@@ -24,18 +26,21 @@ function NEATIndiv(cfg:Dict)
         for i in 1:n_in
             for j in 1:n_out
                 inno = i * n_out + j
-                push!(genes, Gene(i, j, inno))
+                push!(genes, Gene(-1.0 * i, j+1.0, inno))
             end
         end
     end
     cfg["innovation_max"] = n_in * n_out
 
+    sort!(genes, by= g -> g.inno_nb, rev=false)
+    sort!(neuron_pos)
+
     fitness = -Inf .* ones(cfg["d_fitness"])
 
-    NEATIndiv(genes, fitness, neurons)
+    NEATIndiv(genes, fitness, neuron_pos)
 end
 
-function NEATIndinv(ind::NEATIndiv)
+function NEATIndiv(ind::NEATIndiv)
     ind2 = deepcopy(ind)
     ind2.fitness .= -Inf
     ind2

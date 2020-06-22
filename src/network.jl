@@ -1,3 +1,5 @@
+export Neuron, process
+
 mutable struct Neuron
     position::Float64
     activ_func::Function
@@ -5,10 +7,6 @@ mutable struct Neuron
     output::Float64
 end
 
-mutable struct Network
-    neurons::Array{Neuron}
-end
-
-function Network(ind:NEATIndiv)
+function process(indiv::NEATIndiv, cfg::Dict)
     body
 end

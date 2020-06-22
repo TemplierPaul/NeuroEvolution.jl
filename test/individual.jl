@@ -1,39 +1,25 @@
 cfg = get_config("test.yaml")
-cfg["innovation_max"] = 5
 
-@testset "Individual" begin
-
-    ind = NEATInd(cfg)
-
-    n_nodes = cfg["n_in"] + cfg["n_out"]
-    @test ind.n_hidden == 0
-    @test length(ind.connections) == cfg["n_in"] * cfg["n_out"]
-    weights = []
-    for c in ind.connections
-        @test c.in_node < c.out_node
-        @test c.weight < Inf && c.weight > -Inf
-        push!(weights, c.weight)
-        @test c.enabled || ~c.enabled
-        @test c.innovation <= cfg["innovation_max"]
-        @test c.innovation <= length(ind.connections) + cfg["innovation_max"]
-    end
-
-    @test length(unique(weights)) > 1
+function test_indiv(ind::NEATIndiv, cfg::Dict)
+    n_in = cfg["n_in"]
+    n_out = cfg["n_out"]
+    @test length(ind.genes) == n_in * n_out
+    @test length(ind.fitness) == cfg["d_fitness"]
+    @test all(ind.fitness .== -Inf)
+    @test length(ind.neuron_pos) == n_in + n_out
 end
 
-@testset "Reconstruct individual" begin
+@testset "Individual" begin
+    n_in = cfg["n_in"]
+    n_out = cfg["n_out"]
+    ind = NEATIndiv(cfg)
+    test_indiv(ind, cfg)
+    @test cfg["innovation_max"]==n_in * n_out
 
-    ind = NEATInd(cfg)
-    for c in ind.connections
-        c.weight = rand()
-        if rand() < 0.5
-            c.enabled = false
-        end
-    end
+    ind2 = NEATIndiv(ind)
+    test_indiv(ind2, cfg)
+    @test cfg["innovation_max"]==n_in * n_out
 
-    string_ind = string(ind)
-    @test typeof(string_ind) == String
-
-    ind2 = NEATInd(cfg, string_ind)
+    test_identical(ind, ind)
     test_identical(ind, ind2)
 end

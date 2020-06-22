@@ -1,8 +1,7 @@
 mutable struct NEATIndiv <: Cambrian.Individual
-    neurons::Array{Float64}
     genes::Array{Gene}
     fitness::Array{Float64}
-    network::Network
+    neurons::Array{Float64}
 end
 
 function NEATIndiv(cfg:Dict)
@@ -19,18 +18,21 @@ function NEATIndiv(cfg:Dict)
         push!(neurons, Neuron(-1.0*i, activation, 0, 0))
     end
 
-
-
+    # Add genes
+    genes::Array{Gene}=[]
     if cfg["start_fully_connected"]!=0
         for i in 1:n_in
             for j in 1:n_out
-
+                inno = i * n_out + j
+                push!(genes, Gene(i, j, inno))
             end
         end
     end
+    cfg["innovation_max"] = n_in * n_out
 
     fitness = -Inf .* ones(cfg["d_fitness"])
-    NEATIndiv([], cfg.)
+
+    NEATIndiv(genes, fitness, neurons)
 end
 
 function NEATIndinv(ind::NEATIndiv)

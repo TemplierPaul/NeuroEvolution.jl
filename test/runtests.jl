@@ -3,11 +3,11 @@ using Cambrian
 using Test
 
 function test_identical(ind::NEATIndiv, ind2::NEATIndiv)
-    @test ind.n_in == ind2.n_in
-    @test ind.n_out == ind2.n_out
-    @test ind.n_hidden == ind2.n_hidden
+    @test length(ind.genes) == length(ind2.genes)
+    @test length(ind.neurons) == length(ind2.genes)
+    @test all(ind.neurons .== ind2.neurons)
 
-    for i in eachindex(ind.connections)
+    for i in eachindex(ind.neurons)
         @test ind.connections[i].in_node == ind2.connections[i].in_node
         @test ind.connections[i].out_node == ind2.connections[i].out_node
         @test ind.connections[i].weight == ind2.connections[i].weight

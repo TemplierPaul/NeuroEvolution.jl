@@ -1,4 +1,3 @@
-
 cfg = get_config("test.yaml")
 cfg["innovation_max"] = 5
 

@@ -10,3 +10,4 @@ p_mutate_enabled: 0.0
 p_mutate_add_neuron: 0.01
 p_mutate_add_connection: 0.3
 start_fully_connected: 1
+allow_recurrence: 0

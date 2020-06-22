@@ -1,0 +1,11 @@
+n_in: 5
+n_out: 3
+d_fitness: 2
+innovation_max: 0
+p_mut_weights: 0.1
+weight_factor: 0.1
+p_mut_neurons: 0.1
+p_mutate_weights: 0.9
+p_mutate_enabled: 0.0
+p_mutate_add_neuron: 0.01
+p_mutate_add_connection: 0.3

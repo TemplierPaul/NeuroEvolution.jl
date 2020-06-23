@@ -1,5 +1,6 @@
 export build!, process
 
+"Create the network from the individual"
 function build!(indiv::NEATIndiv)
     n_in = Integer(-1 * minimum(indiv.neuron_pos))
     n_out = Integer(maximum(indiv.neuron_pos))
@@ -21,17 +22,21 @@ function build!(indiv::NEATIndiv)
     indiv.network = net
 end
 
+"Set all outputs to 0"
 function reset(net::Network)
     for n in net.neurons
         n.output = 0.
     end
 end
 
+"Compute the output value of a neuron"
 function compute!(n::Neuron, neur_dict::Dict)
     sum::Float64 = 0.
     for c in n.connections
-
+        origin_neuron = neur_dict[c.origin]
+        sum += origin_neuron.output
     end
+    n.output = n.activ_func(sum)
 end
 
 "Process one input"

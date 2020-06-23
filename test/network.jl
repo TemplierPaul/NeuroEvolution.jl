@@ -23,10 +23,14 @@ cfg = get_config("test.yaml")
     y = process(ind, x)
     @test length(y)==n_out
     @test all(typeof.(y) .==Float64)
+    @test !all(y .== 0)
 
+    cfg["n_out"]=1
+    ind = NEATIndiv(cfg)
     # Processing an array of inputs
     X, Y = xor_dataset(n_in, 100)
     y = process(ind, X)
     @test length(y)==100
-    @test length(y[1])==n_out
+    @test length(y[1])==1
+    @test minimum(y) != maximum(y)
 end

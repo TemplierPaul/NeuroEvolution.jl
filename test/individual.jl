@@ -20,6 +20,6 @@ end
     test_indiv(ind2, cfg)
     @test cfg["innovation_max"]==n_in * n_out
 
-    test_identical(ind, ind)
-    test_identical(ind, ind2)
+    @test test_identical(ind, ind)
+    @test test_identical(ind, ind2)
 end

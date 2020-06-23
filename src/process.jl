@@ -13,7 +13,7 @@ function build!(indiv::NEATIndiv)
     # Add constant neuron for bias at 0
     net.neurons[0] = Neuron(0, sigmoid, 0., [])
 
-    # For each neuron, create a list of connections towards it
+    # For each neuron, make a list of connections towards it
     for g in indiv.genes
         if g.activated
             push!(net.neurons[g.destination].connections, g)

@@ -1,9 +1,13 @@
 export NEATIndiv
 
+include("network.jl")
+
+
 mutable struct NEATIndiv <: Cambrian.Individual
     genes::Array{Gene}
     fitness::Array{Float64}
     neuron_pos::Array{Float64}
+    network::Network
 end
 
 function NEATIndiv(cfg::Dict)

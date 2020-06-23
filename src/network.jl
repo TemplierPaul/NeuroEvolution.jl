@@ -1,4 +1,4 @@
-export Neuron, process
+export Neuron, Network
 
 mutable struct Neuron
     position::Float64
@@ -7,6 +7,6 @@ mutable struct Neuron
     output::Float64
 end
 
-function process(indiv::NEATIndiv, cfg::Dict)
-    body
+struct Network
+    a::Int
 end

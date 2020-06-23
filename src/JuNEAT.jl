@@ -9,8 +9,9 @@ include("config.jl")
 include("utils.jl")
 
 include("gene.jl")
-include("individual.jl")
 include("network.jl")
+include("individual.jl")
+include("process.jl")
 
 
 include("mutation.jl")

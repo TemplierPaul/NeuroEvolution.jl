@@ -34,6 +34,8 @@ function test_identical(ind::NEATIndiv, ind2::NEATIndiv)
 end
 
 include("individual.jl")
-# include("network.jl")
+include("xor.jl")
+
+include("network.jl")
 # include("process.jl")
 # include("mutation.jl")

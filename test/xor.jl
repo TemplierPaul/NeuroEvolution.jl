@@ -1,12 +1,12 @@
-function xor(a::Int64, b::Int64)
+function xor(a::Float64, b::Float64)
     if a + b == 1
-        1
+        1.
     else
-        0
+        0.
     end
 end
 
-function xor(a::Array{Int64})
+function xor(a::Array{Float64})
     v = a[1]
     for i in 2:length(a)
         v = xor(v, a[i])
@@ -15,12 +15,12 @@ function xor(a::Array{Int64})
 end
 
 function rand_bin(len::Int64)
-    rand(0:1, len)
+    1.0 * rand(0:1, len)
 end
 
-function xor_dataset(n_records::Int64, len::Int64)
-    X::Array{Array{Int64}}=[]
-    y::Array{Int64}=[]
+function xor_dataset(len::Int64, n_records::Int64)
+    X::Array{Array{Float64}}=[]
+    y::Array{Float64}=[]
     for i in 1:n_records
         l = rand_bin(len)
         push!(X, l)
@@ -34,16 +34,16 @@ end
     @test length(a) == 20
     @test all(a.<=1)
     @test all(a.>=0)
-    @test all(typeof.(a) .== Int64)
+    @test all(typeof.(a) .== Float64)
 
     b = xor(a)
-    @test typeof(b) == Int64
+    @test typeof(b) == Float64
 
-    X, y = xor_dataset(100, 20)
+    X, y = xor_dataset(20, 100)
     @test length(X)==100
     @test length(y)==100
     @test length(X[1])==20
-    @test typeof(y[1]) == Int64
+    @test typeof(y[1]) == Float64
 
     @test all(xor.(X) .== y)
 end

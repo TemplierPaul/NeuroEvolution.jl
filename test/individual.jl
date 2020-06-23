@@ -6,7 +6,7 @@ function test_indiv(ind::NEATIndiv, cfg::Dict)
     @test length(ind.genes) == n_in * n_out
     @test length(ind.fitness) == cfg["d_fitness"]
     @test all(ind.fitness .== -Inf)
-    @test length(ind.neuron_pos) == n_in + n_out
+    @test length(ind.neuron_pos) == n_in + n_out + 1
 end
 
 @testset "Individual" begin

@@ -1,5 +1,5 @@
 n_in: 5
-n_out: 3
+n_out: 1
 d_fitness: 2
 innovation_max: 0
 p_mut_weights: 0.1

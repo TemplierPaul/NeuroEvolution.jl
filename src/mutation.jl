@@ -1,6 +1,9 @@
-export mutate_weight, mutate_connect, mutate_neuron, mutate_enable, mutate
+export mutate_weight, mutate_connect, mutate_neuron, mutate_enabled, mutate
 
+"Mutate the weight of genes"
 function mutate_weight(ind::NEATIndiv, cfg::Dict)
+    #TODO Add mutation power
+    # https://github.com/FernandoTorres/NEAT/blob/master/src/genome.cpp
     ind_mut = NEATIndiv(ind)
     for g in ind_mut.genes
         if rand() < cfg["p_mut_weights"]
@@ -14,6 +17,7 @@ function indexof(a::Array{Float64}, f::Float64)
     findall(x->x==f, a)[1]
 end
 
+"Add a connection between 2 random neurons"
 function mutate_connect(ind::NEATIndiv, cfg::Dict)
     sort!(ind.neuron_pos)
 
@@ -33,6 +37,17 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
         valid[i_origin, i_dest]=false
     end
 
+
+    for dest in 1:nb_neur
+        valid[dest, dest]=false # Remove links to self
+        for orig in 1:n_in
+            valid[orig, dest]=false # Remove links towards input neurons
+        end
+    end
+
+    # TODO solve issue with links between 2 output neurons:
+    # recurrence depends on output order
+
     # Filter invalid ones
     conns = findall(valid)
     if length(conns) > 0
@@ -50,14 +65,55 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
     ind_mut
 end
 
+"Split a connection into 2 connections with a new neuron"
 function mutate_neuron(ind::NEATIndiv, cfg::Dict)
-    ind
+    ind_mut = NEATIndiv(ind)
+
+    if length(ind.genes)==0
+        return ind_mut
+    end
+
+    # Connection to split
+    g = rand(ind_mut.genes)
+    g.enabled = false
+
+    # Create neuron between origin and destination, in [0; 1]
+    n_min = maximum([0, g.destination, g.origin])
+    n_max = minimum([1, g.destination, g.origin])
+    n = n_min + rand() * (n_max - n_min)
+    push!(ind_mut.neuron_pos, n)
+    sort!(ind_mut.neuron_pos)
+
+    # Create connections
+    i = cfg["innovation_max"]
+    g1 = Gene(g.origin, n, i+1)
+    g2 = Gene(n, g.destination, i+2)
+    cfg["innovation_max"] +=2
+
+    # Add connections and neuron
+    append!(ind_mut.genes, [g1, g2])
+
+    ind_mut
 end
 
-function mutate_enable(ind::NEATIndiv, cfg::Dict)
-    ind
+"Switch enabled"
+function mutate_enabled(ind::NEATIndiv, cfg::Dict)
+    ind_mut = NEATIndiv(ind)
+    g = rand(ind_mut.genes)
+    g.enabled = !g.enabled
+    ind_mut
 end
 
 function mutate(ind::NEATIndiv, cfg::Dict)
-    ind
+    if rand() < cfg["p_mutate_add_neuron"]
+        return mutate_neuron(ind, cfg)
+    elseif rand() < cfg["p_mutate_add_connection"]
+        return mutate_connect(ind, cfg)
+    elseif rand() < cfg["p_mutate_weights"]
+        return mutate_weight(ind, cfg)
+    elseif rand() < cfg["p_mutate_enabled"]
+        return mutate_enabled(ind, cfg)
+    end
+    # return clone if no mutation occurs
+    NEATIndiv(ind)
 end

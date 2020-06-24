@@ -5,7 +5,7 @@ mutable struct Gene
     origin::Float64
     destination::Float64
     weight::Float64
-    activated::Bool
+    enabled::Bool
 end
 
 function Gene(origin::Float64, destination::Float64, inno::Integer)

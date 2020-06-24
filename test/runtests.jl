@@ -15,7 +15,7 @@ function test_identical(g1::Gene, g2::Gene)
     same &= g1.origin == g2.origin
     same &= g1.destination == g2.destination
     same &= g1.weight == g2.weight
-    same &= g1.activated == g2.activated
+    same &= g1.enabled == g2.enabled
     same
 end
 
@@ -25,6 +25,9 @@ function test_identical(ind::NEATIndiv, ind2::NEATIndiv)
     same &= length(ind.neuron_pos) == length(ind2.neuron_pos)
     same &= all(ind.fitness .== ind2.fitness)
 
+    if !same
+        return false
+    end
     for i in eachindex(ind.genes)
         same &= test_identical(ind.genes[i], ind2.genes[i])
     end
@@ -42,3 +45,4 @@ include("xor.jl")
 
 include("network.jl")
 include("mutation.jl")
+include("crossover.jl")

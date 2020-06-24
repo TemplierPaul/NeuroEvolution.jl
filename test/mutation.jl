@@ -6,6 +6,7 @@ ind_control = NEATIndiv(ind)
 
 @testset "Mutation Weight" begin
     cfg = get_config("test.yaml")
+    cfg["p_mut_weights"]=1
     ind_mut = mutate_weight(ind, cfg)
     @test test_identical(ind, ind_control)
     @test !test_identical(ind, ind_mut)
@@ -30,14 +31,20 @@ end
 
 @testset "Mutation Enable" begin
     cfg = get_config("test.yaml")
-    ind_mut = mutate_enable(ind, cfg)
+    ind_mut = mutate_enabled(ind, cfg)
     @test test_identical(ind, ind_control)
     @test !test_identical(ind, ind_mut)
-    @test ind.enabled = !ind_mut.enabled
+    enabled = true
+    for g in ind_mut.genes
+        enabled &= g.enabled
+    end
+    @test ! enabled
 end
 
 @testset "Mutation" begin
     cfg = get_config("test.yaml")
+    cfg["p_mutate_enabled"] = 1 # Ensure there is a mutation
+    cfg["p_mut_weights"]=1 # Ensure weights mutation really happens
     ind_mut = mutate(ind, cfg)
     @test test_identical(ind, ind_control)
     @test !test_identical(ind, ind_mut)

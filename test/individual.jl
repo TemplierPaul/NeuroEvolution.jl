@@ -22,4 +22,14 @@ end
 
     @test test_identical(ind, ind)
     @test test_identical(ind, ind2)
+
+    ind3 = NEATIndiv(cfg)
+    test_indiv(ind3, cfg)
+    @test !test_identical(ind, ind3)
+    @test cfg["innovation_max"]==n_in * n_out
+
+    @test distance(ind, ind, cfg)  ==0.
+    @test distance(ind2, ind, cfg) ==0.
+    @test distance(ind, ind3, cfg) != 0.
+    @test distance(ind, ind3, cfg) == distance(ind3, ind, cfg)
 end

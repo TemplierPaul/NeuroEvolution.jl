@@ -5,29 +5,18 @@ function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
     p1, p2 = sort([parent1, parent2], by=x -> x.fitness, rev=true)
     child = NEATIndiv(p1)
 
-    # Dicts {inno_nb: gene} for each
-    p1_genes = Dict()
-    for g in p1.genes
-        p1_genes[g.inno_nb]=g
-    end
-
-    p2_genes = Dict()
-    for g in p2.genes
-        p2_genes[g.inno_nb]=g
-    end
-
     # Child connections
-    child_genes::Array{Gene}=[]
+    child_genes=Dict()
     neuron_pos::Array{Float64}=[]
     for i in 1:cfg["innovation_max"]
         g = nothing
-        if i in keys(p1_genes)
+        if i in keys(p1.genes)
             # Both parents have the gene: pick random
-            if  i in keys(p2_genes)
+            if  i in keys(p1.genes)
                 if rand()>0.5
-                    g = Gene(p1_genes[i])
+                    g = Gene(p1.genes[i])
                 else
-                    g = Gene(p2_genes[i])
+                    g = Gene(p1.genes[i])
                 end
             # Only parent 1 has it: add it
             else
@@ -37,7 +26,7 @@ function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
 
         # Add the connection to the child, add the neuron IDs
         if g != nothing
-            push!(child_genes, g)
+            child_genes[g.inno_nb] = g
             if !(g.origin in neuron_pos)
                 push!(neuron_pos, g.origin)
             end

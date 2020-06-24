@@ -5,7 +5,7 @@ function mutate_weight(ind::NEATIndiv, cfg::Dict)
     #TODO Add mutation power
     # https://github.com/FernandoTorres/NEAT/blob/master/src/genome.cpp
     ind_mut = NEATIndiv(ind)
-    for g in ind_mut.genes
+    for g in values(ind_mut.genes)
         if rand() < cfg["p_mut_weights"]
             g.weight = g.weight + randn()*cfg["weight_factor"]
         end
@@ -31,7 +31,7 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
     valid = trues(nb_neur, nb_neur)
 
     # Remove existing ones
-    for g in ind.genes
+    for g in values(ind.genes)
         i_origin = indexof(ind.neuron_pos, g.origin)
         i_dest = indexof(ind.neuron_pos, g.destination)
         valid[i_origin, i_dest]=false
@@ -59,7 +59,7 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
 
         g = Gene(i, j, cfg["innovation_max"])
 
-        push!(ind_mut.genes, g)
+        ind_mut.genes[cfg["innovation_max"]]=g
         ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
     end
     ind_mut
@@ -74,7 +74,7 @@ function mutate_neuron(ind::NEATIndiv, cfg::Dict)
     end
 
     # Connection to split
-    g = rand(ind_mut.genes)
+    g = rand(collect(values(ind_mut.genes)))
     g.enabled = false
 
     # Create neuron between origin and destination, in [0; 1]
@@ -86,12 +86,9 @@ function mutate_neuron(ind::NEATIndiv, cfg::Dict)
 
     # Create connections
     i = cfg["innovation_max"]
-    g1 = Gene(g.origin, n, i+1)
-    g2 = Gene(n, g.destination, i+2)
+    ind_mut.genes[i+1] = Gene(g.origin, n, i+1)
+    ind_mut.genes[i+2] = Gene(n, g.destination, i+2)
     cfg["innovation_max"] +=2
-
-    # Add connections and neuron
-    append!(ind_mut.genes, [g1, g2])
 
     ind_mut
 end
@@ -99,7 +96,7 @@ end
 "Switch enabled"
 function mutate_enabled(ind::NEATIndiv, cfg::Dict)
     ind_mut = NEATIndiv(ind)
-    g = rand(ind_mut.genes)
+    g = rand(collect(values(ind_mut.genes)))
     g.enabled = !g.enabled
     ind_mut
 end

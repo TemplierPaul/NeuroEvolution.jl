@@ -5,8 +5,13 @@ innovation_max: 0
 n_in: 5
 n_out: 2
 d_fitness: 2
-start_fully_connected: 1
-allow_recurrence: 1
+start_fully_connected: true
+allow_recurrence: true
+
+# Distance coefficients
+excess_coef: 0.1
+disjoint_coef: 0.1
+weight_diff_coef: 0.1
 
 # Mutation
 p_mut_weights: 0.1

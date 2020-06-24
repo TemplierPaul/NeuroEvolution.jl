@@ -35,7 +35,7 @@ end
     @test test_identical(ind, ind_control)
     @test !test_identical(ind, ind_mut)
     enabled = true
-    for g in ind_mut.genes
+    for g in values(ind_mut.genes)
         enabled &= g.enabled
     end
     @test ! enabled

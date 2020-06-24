@@ -14,7 +14,7 @@ function build!(indiv::NEATIndiv)
     net.neurons[0] = Neuron(0, sigmoid, 0., [])
 
     # For each neuron, make a list of connections towards it
-    for g in indiv.genes
+    for g in values(indiv.genes)
         if g.enabled
             push!(net.neurons[g.destination].connections, g)
         end

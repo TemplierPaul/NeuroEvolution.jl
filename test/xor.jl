@@ -47,3 +47,28 @@ end
 
     @test all(xor.(X) .== y)
 end
+
+function log_loss(y_true, y_pred)
+    y_pred = maximum([minimum([y_pred, 1-10^-15]), 10^-15])
+    if y_true == 1.0
+        -log(y_pred)
+    else
+        -log(1-y_pred)
+    end
+end
+
+@testset "Log Loss" begin
+    @test log_loss(0, 0) < 0.01
+    @test log_loss(0, 1) > 0
+    @test log_loss(1, 1) < 0.01
+    @test log_loss(1, 0) > 0
+
+    X, y = xor_dataset(20, 100)
+    @test sum(log_loss.(y, y)) < 0.1
+end
+
+function fitness_xor(indiv::NEATIndiv, len::Int64=2)
+    X, y = xor_dataset(len, 100)
+    y_pred = process(indiv, X)
+    sum(log_loss.(y, y_pred))
+end

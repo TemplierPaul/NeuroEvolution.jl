@@ -28,25 +28,22 @@ end
 
 @testset "New neuron position" begin
     # Not recurrent
-    for i in 1:100
-        i = rand(-10:0)
-        j = rand(1:10)
-        n = random_position(1.0*i, 1.0*j)
-        @test n < j
-        @test n > i
-        @test n > 0.0
-        @test n < 1.0
-    end
+    i = 1.0.*rand(-10:0, 100)
+    j = 1.0.*rand(1:10, 100)
+    n = random_position.(i, j)
+    @test all(n .< j)
+    @test all(n .> i)
+    @test all(n .> 0.0)
+    @test all(n .< 1.0)
+
     # Recurrent
-    for i in 1:100
-        i = rand(1:10)
-        j = rand(-10:0)
-        n = random_position(1.0*i, 1.0*j)
-        @test n < i
-        @test n > j
-        @test n > 0.0
-        @test n < 1.0
-    end
+    i = rand(1:10, 100)
+    j = rand(-10:0, 100)
+    n = random_position.(1.0*i, 1.0*j)
+    @test all(n .< i)
+    @test all(n .> j)
+    @test all(n .> 0.0)
+    @test all(n .< 1.0)
 end
 
 @testset "Mutation Add neuron" begin

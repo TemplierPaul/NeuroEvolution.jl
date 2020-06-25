@@ -16,6 +16,8 @@ include("process.jl")
 include("mutation.jl")
 include("crossover.jl")
 
-include("evaluation.jl")
+include("species.jl")
+include("populate.jl")
+include("evolution.jl")
 
 end # module

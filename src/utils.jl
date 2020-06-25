@@ -23,12 +23,12 @@ function ReLU(x::Float64)
     end
 end
 
-function identity(x::Float64)
+function identity_activ(x::Float64)
     x
 end
 
 function gauss(x::Float64)
-    exp(-5.0 * x**2)
+    exp(-5.0 * x^2)
 end
 
 function tanh_activ(x::Float64)

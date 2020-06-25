@@ -13,10 +13,17 @@ excess_coef: 0.1
 disjoint_coef: 0.1
 weight_diff_coef: 0.1
 
+# Species
+dist_threshold: 0.1
+species_max: 0
+tournament_size: 2
+
+# Reproduction
+p_mutate_only: 0.2
+
 # Mutation
 p_mut_weights: 0.1
 weight_factor: 0.1
-p_mut_neurons: 0.1
 p_mutate_weights: 0.9
 p_mutate_enabled: 1.
 p_mutate_add_neuron: 0.01

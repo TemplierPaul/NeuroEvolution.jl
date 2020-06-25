@@ -30,5 +30,7 @@ function get_config(filename::String)
         push!(cfg["activation_functions"], gauss)
     end
 
+    cfg["Species"]=Dict()
+
     cfg
 end

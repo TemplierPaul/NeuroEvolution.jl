@@ -2,9 +2,9 @@
 innovation_max: 0
 
 # Structure
-n_in: 5
-n_out: 2
-d_fitness: 2
+n_in: 4
+n_out: 1
+d_fitness: 1
 start_fully_connected: true
 allow_recurrence: true
 

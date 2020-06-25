@@ -6,10 +6,9 @@ function mutate_weight(ind::NEATIndiv, cfg::Dict)
     # https://github.com/FernandoTorres/NEAT/blob/master/src/genome.cpp
     ind_mut = NEATIndiv(ind)
     for g in values(ind_mut.genes)
-        if rand() < cfg["p_mut_weights"]
-            g.weight = g.weight + randn()*cfg["weight_factor"]
-        end
+        g.weight = g.weight + randn()*cfg["weight_factor"]
     end
+    ind_mut.fitness.= -Inf
     ind_mut
 end
 
@@ -39,9 +38,19 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
 
 
     for dest in 1:nb_neur
-        valid[dest, dest]=false # Remove links to self
+        # Remove links to self
+        valid[dest, dest]=false
+
+         # Remove links towards input neurons
         for orig in 1:n_in
-            valid[orig, dest]=false # Remove links towards input neurons
+            valid[orig, dest]=false
+        end
+
+        # Remove recurrence if needed
+        if !cfg["allow_recurrence"]
+            for orig in dest:nb_neur
+                valid[orig, dest]=false
+            end
         end
     end
 
@@ -62,6 +71,7 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
         ind_mut.genes[cfg["innovation_max"]]=g
         ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
     end
+    ind_mut.fitness.= -Inf
     ind_mut
 end
 
@@ -78,18 +88,17 @@ function mutate_neuron(ind::NEATIndiv, cfg::Dict)
     g.enabled = false
 
     # Create neuron between origin and destination, in [0; 1]
-    n_min = maximum([0, g.destination, g.origin])
-    n_max = minimum([1, g.destination, g.origin])
-    n = n_min + rand() * (n_max - n_min)
+    n = random_position(g.origin, g.destination)
     push!(ind_mut.neuron_pos, n)
     sort!(ind_mut.neuron_pos)
+    ind_mut.activ_functions[n] = rand(cfg["activation_functions"])
 
     # Create connections
     i = cfg["innovation_max"]
     ind_mut.genes[i+1] = Gene(g.origin, n, i+1)
     ind_mut.genes[i+2] = Gene(n, g.destination, i+2)
     cfg["innovation_max"] +=2
-
+    ind_mut.fitness.= -Inf
     ind_mut
 end
 

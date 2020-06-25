@@ -5,6 +5,7 @@ mutable struct NEATIndiv <: Cambrian.Individual
     fitness::Array{Float64}
     neuron_pos::Array{Float64}
     network::Network
+    activ_functions::Dict
 end
 
 function NEATIndiv(cfg::Dict)
@@ -15,9 +16,15 @@ function NEATIndiv(cfg::Dict)
     # Neuron positions: Input and output
     neuron_pos = -n_in:n_out
 
+    # Neurons activation functions
+    activ_functions = Dict()
+    for i in neuron_pos
+        activ_functions[i]=rand(cfg["activation_functions"])
+    end
+
     # Add genes
     genes=Dict()
-    if cfg["start_fully_connected"]!=0
+    if cfg["start_fully_connected"]
         for i in 1:n_in
             for j in 1:n_out
                 inno = i * n_out + j
@@ -33,13 +40,11 @@ function NEATIndiv(cfg::Dict)
 
     network = Network(n_in, n_out, Dict())
 
-    NEATIndiv(genes, fitness, neuron_pos, network)
+    NEATIndiv(genes, fitness, neuron_pos, network, activ_functions)
 end
 
 function NEATIndiv(ind::NEATIndiv)
-    ind2 = deepcopy(ind)
-    ind2.fitness .= -Inf
-    ind2
+    deepcopy(ind)
 end
 
 function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)

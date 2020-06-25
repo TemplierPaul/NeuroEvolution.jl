@@ -24,10 +24,10 @@ p_mutate_add_connection: 0.3
 
 # Activation functions
 sigmoid: true
-sin: false
-cos: false
-ReLU: false
-tanh: false
-abs: false
-identity: false
-gauss: false
+sin: true
+cos: true
+ReLU: true
+tanh: true
+abs: true
+identity: true
+gauss: true

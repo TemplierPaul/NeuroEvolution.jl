@@ -5,8 +5,8 @@ using YAML
 using JSON
 using Random
 
-include("config.jl")
 include("utils.jl")
+include("config.jl")
 
 include("gene.jl")
 include("network.jl")

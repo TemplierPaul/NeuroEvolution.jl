@@ -1,5 +1,13 @@
 cfg = get_config("test.yaml")
 
+function test_process(ind::NEATIndiv, cfg::Dict)
+    x = rand_bin(cfg["n_in"])
+    y = process(ind, x)
+    @test length(y)==cfg["n_out"]
+    @test all(typeof.(y) .==Float64)
+    @test !all(y .== 0)
+end
+
 @testset "Network" begin
 
     n = Network(3, 5, Dict())

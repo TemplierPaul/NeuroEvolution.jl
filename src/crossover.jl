@@ -2,7 +2,7 @@ export crossover
 
 function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
     # get p1 parent with best fitness to keep its genes
-    p1, p2 = sort([parent1, parent2], by=x -> x.fitness, rev=true)
+    p1, p2 = sort([parent1, parent2], by=x -> x.fitness[1], rev=true)
     child = NEATIndiv(p1)
 
     # Child connections
@@ -42,6 +42,6 @@ function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
     child.neuron_pos = neuron_pos
     child.fitness = -Inf .* ones(cfg["d_fitness"])
     child.network = Network(cfg["n_in"], cfg["n_out"], Dict())
-
+    child.activ_functions = merge(p2.activ_functions, p1.activ_functions)
     child
 end

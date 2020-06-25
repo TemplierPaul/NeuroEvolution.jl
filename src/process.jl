@@ -8,7 +8,8 @@ function build!(indiv::NEATIndiv)
 
     # Create neurons
     for p in indiv.neuron_pos
-        net.neurons[float(p)] = Neuron(float(p), sigmoid, 0., [])
+        func = indiv.activ_functions[p]
+        net.neurons[float(p)] = Neuron(float(p), func, 0., [])
     end
     # Add constant neuron for bias at 0
     net.neurons[0] = Neuron(0, sigmoid, 0., [])

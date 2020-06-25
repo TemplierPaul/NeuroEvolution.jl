@@ -1,10 +1,17 @@
+# Cambrian settings
+d_fitness: 1
+n_population: 1
+n_elite: 1
+n_gen: 2
+log_gen: 1
+save_gen: 5
+
 # Innovation
 innovation_max: 0
 
 # Structure
 n_in: 5
 n_out: 2
-d_fitness: 2
 start_fully_connected: true
 allow_recurrence: true
 

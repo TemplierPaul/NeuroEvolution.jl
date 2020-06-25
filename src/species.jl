@@ -1,4 +1,4 @@
-export Species
+export Species, add!, renew!, belongs_to_species, find_species!, compute_fitness!
 
 mutable struct Species
     id::Int64
@@ -48,7 +48,7 @@ Assigns indiv to the first species that matches.
 If no species match, creates a new one.
 "
 function find_species!(indiv::NEATIndiv, cfg::Dict)
-    for s in values(e.cfg.species)
+    for s in values(cfg["Species"])
         if belongs_to_species(s, indiv)
             add!(s, indiv)
             return true
@@ -64,13 +64,13 @@ end
 function compute_fitness!(s::Species, fitness::Function)
     s_size = length(s.members) # Species size
     for i in s.members
-        i.fitness = fitness(i) / s_size
+        i.fitness .= fitness(i) / s_size
     end
     s.total_fitness = sum(getfield(s.members, :fitness))
     s.total_fitness
 end
 
-
+"Creates n_children offsprings by crossover or mutation"
 function reproduction!(
     s::Species,
     selection::Function,

@@ -46,3 +46,6 @@ include("xor.jl")
 include("network.jl")
 include("mutation.jl")
 include("crossover.jl")
+
+include("species.jl")
+include("populate.jl")

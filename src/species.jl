@@ -31,16 +31,16 @@ function renew!(s::Species)
 end
 
 "Returns true if indiv is close enough to s, else false"
-function belongs_to_species(s::Species, indiv::NEATIndiv)
-    if len(s.previous_members) > 0 # Compare first to the alive individuals
+function belongs_to_species(s::Species, indiv::NEATIndiv, cfg::Dict)
+    if length(s.previous_members) > 0 # Compare first to the alive individuals
         rand_indiv = rand(s.previous_members)
-    elseif len(s.members) > 0 # Else compare to last dead ones
+    elseif length(s.members) > 0 # Else compare to last dead ones
         rand_indiv = rand(s.members)
     else # If both are empty, the species is empty
         return true
     end
 
-    distance(indiv, rand_indiv) <= s.dist_threshold
+    distance(indiv, rand_indiv, cfg) <= s.dist_threshold
 end
 
 "
@@ -49,7 +49,7 @@ If no species match, creates a new one.
 "
 function find_species!(indiv::NEATIndiv, cfg::Dict)
     for s in values(cfg["Species"])
-        if belongs_to_species(s, indiv)
+        if belongs_to_species(s, indiv, cfg)
             add!(s, indiv)
             return true
         end
@@ -64,9 +64,12 @@ end
 function compute_fitness!(s::Species, fitness::Function)
     s_size = length(s.members) # Species size
     for i in s.members
-        i.fitness .= fitness(i) / s_size
+        i.fitness .= fitness(i) ./ s_size
     end
-    s.total_fitness = sum(getfield(s.members, :fitness))
+    s.total_fitness = 0
+    for i in s.members
+        s.total_fitness += i.fitness[1]
+    end
     s.total_fitness
 end
 
@@ -82,16 +85,16 @@ function reproduction!(
         if rand() < cfg["p_mutate_only"]
             # Mutate only
             p1 = selection(s.previous_members)
-            child = mutate(p1)
+            child = mutate(p1, cfg)
         else
             # Crossover
             p1 = selection(s.previous_members)
             p2 = selection(s.previous_members)
             if p1 != p2
-                child = crossover(p1, p2)
+                child = crossover(p1, p2, cfg)
             else
                 # If the same individual is chosen twice, mutate it
-                child = mutate(p1)
+                child = mutate(p1, cfg)
             end
         end
         add!(s, child)

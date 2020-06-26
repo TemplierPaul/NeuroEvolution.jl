@@ -61,7 +61,6 @@ function process(indiv::NEATIndiv, last_features::Array{Float64})
         push!(out, indiv.network.neurons[1.0*i].output)
     end
     out
-
 end
 
 "Process an array of inputs"

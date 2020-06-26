@@ -24,6 +24,7 @@ function NEAT_populate!(e::Evolution, selection::Function)
 
     e.population = new_pop
     println("\n", e.gen, " - Pop: ", length(e.population), "  Species: ", length(e.cfg["Species"]), " Inno: ", e.cfg["innovation_max"])
+    println("Best fitness: ", maximum(getfield.(e.population, :fitness)))
 end
 
 function NEAT_evaluate!(e::Evolution, fitness::Function)

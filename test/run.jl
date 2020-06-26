@@ -29,7 +29,12 @@ end
 @testset "NEAT on XOR" begin
     cfg = get_config("test.yaml")
 
-    #
+    # Run evolution
+    test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
+    e = NEAT(cfg, test_fitness)
+    Cambrian.run!(e)
+
+    # @test length(e.population) == cfg["n_population"]
     println("\n-- NEAT on XOR --")
     X, y = xor_dataset(cfg["n_in"], 100)
     max_f = sum(log_fitness.(y, y)) / length(X)
@@ -40,13 +45,6 @@ end
     end
     min_f = sum(log_fitness.(y, y_false)) / length(X)
     println("Worst possible fitness: ", min_f)
-
-    # Run evolution
-    test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
-    e = NEAT(cfg, test_fitness)
-    println("Min innovation: ", e.cfg["innovation_max"])
-    Cambrian.run!(e)
-    # @test length(e.population) == cfg["n_population"]
 
     # Analyse results
     best = sort(e.population, rev=true)

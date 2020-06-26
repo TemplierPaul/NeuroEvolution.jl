@@ -1,22 +1,29 @@
 export NEAT_populate!, NEAT_evaluate!
 
 function NEAT_tournament(pop::Array{NEATIndiv}, t_size::Int)
+    if length(pop) == 1
+        return pop[1]
+    end
     inds = shuffle!(collect(1:length(pop)))
     sort(pop[inds[1:t_size]])[end]
 end
 
-function NEAT_populate!(
-    e::Evolution;
-    selection::Function = x ->
-        NEAT_tournament(x, e.cfg["tournament_size"]),
-)
+function NEAT_populate!(e::Evolution, selection::Function)
     # Create offsprings and add to the population
-    new_pop::Array{NEATIndiv}=[]
+    new_pop::Array{NEATIndiv} = []
+    # println("\n-------\nTotal fitness: ", e.cfg["total_fitness"], " Pop: ", length(e.population))
     for s in values(e.cfg["Species"])
-        nb_offspring = Integer(floor(s.total_fitness / e.cfg["total_fitness"]))
+        # println("\nFitness: ", s.fitness_val, " Members: ", length(s.members))
+        nb_offspring = Integer(round(
+            length(e.population) * s.fitness_val / e.cfg["total_fitness"],
+        ))
+        # println("Children: ", nb_offspring)
         reproduction!(s, selection, nb_offspring, e.cfg)
         append!(new_pop, s.members)
     end
+
+    e.population = new_pop
+    println("Pop: ", length(e.population), "  Species: ", length(e.cfg["Species"]), " Inno: ", e.cfg["innovation_max"])
 end
 
 function NEAT_evaluate!(e::Evolution, fitness::Function)
@@ -28,10 +35,32 @@ function NEAT_evaluate!(e::Evolution, fitness::Function)
         find_species!(i, e.cfg)
     end
 
-    # Compute fitness
-    e.cfg["total_fitness"]= 0
-    for s in values(e.cfg["Species"])
-        e.cfg["total_fitness"] += compute_fitness!(s, fitness)
-    end
+    # update distance threshold to keep species number stable
+    update_threshold!(e.cfg)
 
+    # Compute fitness
+    e.cfg["total_fitness"] = 0
+    if e.cfg["use_max_fitness"]
+        for s in values(e.cfg["Species"])
+            e.cfg["total_fitness"] +=
+                compute_fitness_max!(s, fitness)
+        end
+    else
+        for s in values(e.cfg["Species"])
+            e.cfg["total_fitness"] +=
+                compute_fitness_mean!(s, fitness)
+        end
+    end
+end
+
+function update_threshold!(cfg::Dict)
+    nb_species = length(cfg["Species"])
+    if nb_species < cfg["target_species_number"]
+        cfg["dist_threshold"] -= cfg["dist_mod"]
+    elseif nb_species > cfg["target_species_number"]
+        cfg["dist_threshold"] += cfg["dist_mod"]
+    end
+    if cfg["dist_threshold"] < cfg["dist_mod"]
+        cfg["dist_threshold"] = cfg["dist_mod"]
+    end
 end

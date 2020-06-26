@@ -111,6 +111,7 @@ function mutate_enabled(ind::NEATIndiv, cfg::Dict)
 end
 
 function mutate(ind::NEATIndiv, cfg::Dict)
+    # println("mutation")
     if rand() < cfg["p_mutate_add_neuron"]
         return mutate_neuron(ind, cfg)
     elseif rand() < cfg["p_mutate_add_connection"]

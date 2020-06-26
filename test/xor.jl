@@ -78,11 +78,6 @@ end
     @test log_loss(1, 1) < 0.01
     @test log_loss(1, 0) > 0
 
-    @test log_loss(0, 0) < 0.01
-    @test log_loss(0, 1) > 0
-    @test log_loss(1, 1) < 0.01
-    @test log_loss(1, 0) > 0
-
     X, y = xor_dataset(20, 100)
     @test sum(log_loss.(y, y)) < 0.1
 end

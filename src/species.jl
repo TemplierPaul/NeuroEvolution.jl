@@ -1,4 +1,4 @@
-export Species, add!, renew!, belongs_to_species, find_species!, compute_fitness!
+export Species, add!, renew!, belongs_to_species, find_species!, compute_fitness_mean!, compute_fitness_max!
 
 mutable struct Species
     id::Int64
@@ -6,7 +6,7 @@ mutable struct Species
     members::Array{NEATIndiv}
     previous_members::Array{NEATIndiv}
     dist_threshold::Float64
-    total_fitness::Float64
+    fitness_val::Float64
 end
 
 "Creates a new species from a config dict and stores it"
@@ -60,17 +60,40 @@ function find_species!(indiv::NEATIndiv, cfg::Dict)
     return true
 end
 
-"Computes fitness for each member with explicit fitness sharing, returns total fitness."
-function compute_fitness!(s::Species, fitness::Function)
+"Computes fitness for each member with explicit fitness sharing, returns mean fitness."
+function compute_fitness_mean!(s::Species, fitness::Function)
+    if length(s.members)==0
+        s.fitness_val
+        return 0
+    end
     s_size = length(s.members) # Species size
+    total_fit = 0
     for i in s.members
-        i.fitness .= fitness(i) ./ s_size
+        f = fitness(i) ./s_size # Explicit fitness sharing
+        i.fitness .=  f
+        total_fit += f[1] # Compute total adjusted fitness in species
     end
-    s.total_fitness = 0
+
+    s.fitness_val = total_fit /s_size # Compute average adjusted fitness in species
+    s.fitness_val
+end
+
+"Computes fitness for each member with explicit fitness sharing, returns max fitness."
+function compute_fitness_max!(s::Species, fitness::Function)
+    if length(s.members)==0
+        s.fitness_val
+        return 0
+    end
+    s_size = length(s.members) # Species size
+    s.fitness_val = 0
+    total_fit = 0
     for i in s.members
-        s.total_fitness += i.fitness[1]
+        f = fitness(i) ./ s_size # Explicit fitness sharing
+        i.fitness .=  f
+        s.fitness_val = maximum([s.fitness_val, f[1]])  # Compute max adjusted fitness in species
+        total_fit += f[1]
     end
-    s.total_fitness
+    s.fitness_val
 end
 
 "Creates n_children offsprings by crossover or mutation"
@@ -80,9 +103,10 @@ function reproduction!(
     n_children::Int64,
     cfg::Dict,
 )
+    s.age += 1
     renew!(s)
     for i = 1:n_children
-        if rand() < cfg["p_mutate_only"]
+        if rand() < cfg["p_mutate_only"] || length(s.previous_members)==1
             # Mutate only
             p1 = selection(s.previous_members)
             child = mutate(p1, cfg)
@@ -92,6 +116,7 @@ function reproduction!(
             p2 = selection(s.previous_members)
             if p1 != p2
                 child = crossover(p1, p2, cfg)
+                child = mutate(child, cfg)
             else
                 # If the same individual is chosen twice, mutate it
                 child = mutate(p1, cfg)

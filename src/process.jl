@@ -25,7 +25,7 @@ end
 
 "Set all outputs to 0"
 function reset(net::Network)
-    for n in net.neurons
+    for n in values(net.neurons)
         n.output = 0.
     end
 end
@@ -42,9 +42,8 @@ end
 
 "Process one input"
 function process(indiv::NEATIndiv, last_features::Array{Float64})
-    if length(indiv.network.neurons) == 0
-        build!(indiv)
-    end
+    build!(indiv)
+    reset(indiv.network)
 
     for p in indiv.neuron_pos
         if p < 0 # Input neurons

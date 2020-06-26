@@ -1,7 +1,7 @@
 # Cambrian settings
 d_fitness: 1
-n_population: 150
-n_gen: 200
+n_population: 200
+n_gen: 100
 log_gen: 1
 save_gen: 5
 
@@ -9,31 +9,32 @@ save_gen: 5
 innovation_max: 0
 
 # Structure
-n_in: 5
-n_out: 2
+n_in: 2
+n_out: 1
 start_fully_connected: true
 allow_recurrence: true
 
 # Distance coefficients
-excess_coef: 0.1
-disjoint_coef: 0.1
-weight_diff_coef: 0.1
+excess_coef: 1
+disjoint_coef: 1
+weight_diff_coef: 1
 
 # Species
-dist_threshold: 0.1
+dist_threshold: 2
+dist_mod: 0.3
+target_species_number: 10
 species_max: 0
 tournament_size: 2
-
-# Reproduction
-p_mutate_only: 0.2
+use_max_fitness: false
+p_mutate_only: 0.1 # Reproduction
 
 # Mutation
-p_mut_weights: 0.1
-weight_factor: 0.1
-p_mutate_weights: 0.9
-p_mutate_enabled: 1.
 p_mutate_add_neuron: 0.01
 p_mutate_add_connection: 0.3
+p_mutate_weights: 0.9
+p_mutate_enabled: 0.1
+p_mut_weights: 0.1
+weight_factor: 0.1
 
 # Activation functions
 sigmoid: true

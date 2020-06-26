@@ -79,7 +79,8 @@ function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)
         end
     end
 
-    N = maximum([length(g1), length(g2)])
+    # N = maximum([length(g1), length(g2)])   # Paper version
+    N = 1 # Implementation version
     if N == 0
         return 0. # Return 0 if none of them has genes (should not happen)
     end
@@ -91,4 +92,10 @@ function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)
     end
 
     dist
+end
+
+function Base.show(io::IO, ::MIME"text/plain", indiv::NEATIndiv)
+    for fname in fieldnames(indiv)
+        println(io, getfield(indiv, fname))
+    end
 end

@@ -31,7 +31,7 @@ function NEATIndiv(cfg::Dict)
                 genes[inno] = Gene(-1.0 * i, 1.0 * j, inno)
             end
         end
-        cfg["innovation_max"] = n_in * n_out
+        cfg["innovation_max"] = maximum([cfg["innovation_max"], n_in * n_out])
     end
 
     sort!(neuron_pos)

@@ -8,7 +8,7 @@ function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
     # Child connections
     child_genes=Dict()
     neuron_pos::Array{Float64}=[]
-    for i in 1:cfg["innovation_max"]
+    for i in keys(merge(p1.genes, p2.genes))
         g = nothing
         if i in keys(p1.genes)
             # Both parents have the gene: pick random

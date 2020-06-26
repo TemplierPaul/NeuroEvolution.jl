@@ -23,7 +23,7 @@ function NEAT_populate!(e::Evolution, selection::Function)
     end
 
     e.population = new_pop
-    println("Pop: ", length(e.population), "  Species: ", length(e.cfg["Species"]), " Inno: ", e.cfg["innovation_max"])
+    println("\n", e.gen, " - Pop: ", length(e.population), "  Species: ", length(e.cfg["Species"]), " Inno: ", e.cfg["innovation_max"])
 end
 
 function NEAT_evaluate!(e::Evolution, fitness::Function)
@@ -37,6 +37,13 @@ function NEAT_evaluate!(e::Evolution, fitness::Function)
 
     # update distance threshold to keep species number stable
     update_threshold!(e.cfg)
+
+    # Update species dict
+    for i in keys(e.cfg["Species"])
+        if length(e.cfg["Species"][i].members) == 0
+            pop!(e.cfg["Species"], i)
+        end
+    end
 
     # Compute fitness
     e.cfg["total_fitness"] = 0
@@ -54,12 +61,32 @@ function NEAT_evaluate!(e::Evolution, fitness::Function)
 end
 
 function update_threshold!(cfg::Dict)
-    nb_species = length(cfg["Species"])
-    if nb_species < cfg["target_species_number"]
-        cfg["dist_threshold"] -= cfg["dist_mod"]
-    elseif nb_species > cfg["target_species_number"]
-        cfg["dist_threshold"] += cfg["dist_mod"]
+    if length(cfg["Species"]) == 0
+        println("NO SPECIES")
+        return 0
     end
+    species_pop = []
+    for s in values(cfg["Species"])
+        push!(species_pop, length(s.members))
+    end
+    if length(species_pop) > 1
+        sort!(species_pop)
+        println("Indiv/species | Mean: ", sum(species_pop)/length(species_pop), " Med: ", species_pop[Integer(floor(length(species_pop)/2))])
+    else
+        println("Only 1 species: ", sum(species_pop), " elements")
+    end
+
+    nb_species = length(cfg["Species"])
+    nb_excess = nb_species - cfg["target_species_number"]
+    dist_mod = cfg["dist_mod"] * abs(nb_excess)/cfg["target_species_number"]
+    if nb_excess < 0
+        cfg["dist_threshold"] -= dist_mod
+        println("Dist Threshold - ", dist_mod, " -> ", cfg["dist_threshold"])
+    elseif nb_excess > 0
+        cfg["dist_threshold"] += dist_mod
+        println("Dist Threshold + ", dist_mod, " -> ", cfg["dist_threshold"])
+    end
+
     if cfg["dist_threshold"] < cfg["dist_mod"]
         cfg["dist_threshold"] = cfg["dist_mod"]
     end

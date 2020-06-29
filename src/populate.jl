@@ -8,6 +8,12 @@ function NEAT_tournament(pop::Array{NEATIndiv}, t_size::Int)
     sort(pop[inds[1:t_size]])[end]
 end
 
+function NEAT_random_top(pop::Array{NEATIndiv}, threshold::Float64)
+    sort!(pop, by= x-> x.fitness, rev=true)
+    max_index = Integer(ceil(threshold * length(pop)))
+    pop[rand(1:max_index)]
+end
+
 function NEAT_populate!(e::Evolution, selection::Function)
     # Create offsprings and add to the population
     new_pop::Array{NEATIndiv} = []

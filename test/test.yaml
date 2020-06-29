@@ -24,9 +24,13 @@ dist_threshold: 2
 dist_mod: 0.3
 target_species_number: 10
 species_max: 0
-tournament_size: 2
 use_max_fitness: false
 p_mutate_only: 0.1 # Reproduction
+
+# selection
+selection_type: "random_top" # 'tournament' or 'random_top'
+tournament_size: 2
+survival_threshold : 0.2
 
 # Mutation
 p_mutate_add_neuron: 0.01

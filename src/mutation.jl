@@ -75,6 +75,14 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
     ind_mut
 end
 
+"Remove a random connection"
+function mutate_disconnect(ind::NEATIndiv, cfg::Dict)
+    ind_mut = NEATIndiv(ind)
+    k = rand(collectkeys(ind_mut.genes)) # pick a random gene
+    pop!(ind_mut.genes, k) # remove it
+    ind_mut
+end
+
 "Split a connection into 2 connections with a new neuron"
 function mutate_neuron(ind::NEATIndiv, cfg::Dict)
     ind_mut = NEATIndiv(ind)
@@ -116,6 +124,8 @@ function mutate(ind::NEATIndiv, cfg::Dict)
         return mutate_neuron(ind, cfg)
     elseif rand() < cfg["p_mutate_add_connection"]
         return mutate_connect(ind, cfg)
+    elseif rand() < cfg["p_mutate_remove_connection"]
+        return mutate_disconnect(ind, cfg)
     elseif rand() < cfg["p_mutate_weights"]
         return mutate_weight(ind, cfg)
     elseif rand() < cfg["p_mutate_enabled"]

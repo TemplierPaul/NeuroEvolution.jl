@@ -8,7 +8,7 @@ function NEAT(cfg::Dict, fitness::Function)
     elseif cfg["selection_type"] == "random_top"
         selection = i::Array{NEATIndiv} -> NEAT_random_top(i, cfg["survival_threshold"])
     else
-        throw(ArgumentError("Wrong selection type"))
+        throw(ArgumentError("Wrong selection type: " + cfg["selection_type"]))
     end
     populate!::Function  = e::Evolution->NEAT_populate!(e, selection)
     Evolution(NEATIndiv, cfg; evaluate=evaluate!, populate=populate!)

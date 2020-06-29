@@ -9,7 +9,7 @@ include("utils.jl")
 include("config.jl")
 
 include("gene.jl")
-include("network.jl")
+include("NEAT_network.jl")
 include("individual.jl")
 include("process.jl")
 
@@ -18,6 +18,9 @@ include("crossover.jl")
 
 include("species.jl")
 include("populate.jl")
-include("evolution.jl")
 
+include("grid_network.jl")
+include("HyperNEAT.jl")
+
+include("evolution.jl")
 end # module

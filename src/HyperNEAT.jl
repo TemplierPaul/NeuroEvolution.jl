@@ -83,12 +83,13 @@ end
 
 function GridNetwork(cfg::Dict)
     layers::Array{Layer} = []
-    layers_size = cfg["hn_layers"]
+    layers_size = [cfg["n_in"]]
+    append!(layers_size, cfg["hn_hidden_layers"])
+    push!(layers_size, cfg["n_out"])
     for i in 1:length(layers_size)
         depth = normalize(i, length(layers_size))
         push!(layers, Layer(layers_size[i], depth, cfg["hn_activ_func"]))
     end
-
     connections::Array{Connection} = []
     for j in 2:length(layers) # Layer_to
         if cfg["hn_link_all_layers"] # Connect from all previous layers

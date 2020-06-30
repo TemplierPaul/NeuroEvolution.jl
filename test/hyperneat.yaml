@@ -1,4 +1,6 @@
 verbose: false
+n_in: 2
+n_out: 1
 
 # Cambrian settings
 d_fitness: 1
@@ -11,8 +13,6 @@ save_gen: 5
 innovation_max: 0
 
 # Structure
-n_in: 4
-n_out: 1
 start_fully_connected: true
 allow_recurrence: true
 
@@ -56,5 +56,5 @@ gauss: true
 # HyperNEAT network parameters
 hyperNEAT: true
 hn_activation: "sigmoid"
-hn_layers: [2, 4, 4, 1]
+hn_hidden_layers: [4, 4] # List of sizes of hidden layers, in processing order (do NOT include input and output)
 hn_link_all_layers: true

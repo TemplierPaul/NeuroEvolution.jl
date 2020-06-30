@@ -1,6 +1,10 @@
-export NEAT
+export NEAT, HyperNEAT
 
-function NEAT(cfg::Dict, fitness::Function)
+"""
+fitness::Function i::NEATIndiv -> computed_fitness(i)
+"""
+
+function core_NEAT(cfg::Dict, fitness::Function)
     evaluate!::Function = e::Evolution->NEAT_evaluate!(e, fitness)
     selection::Function = i::Array{NEATIndiv} -> i[1]
     if cfg["selection_type"] == "tournament"
@@ -12,4 +16,14 @@ function NEAT(cfg::Dict, fitness::Function)
     end
     populate!::Function  = e::Evolution->NEAT_populate!(e, selection)
     Evolution(NEATIndiv, cfg; evaluate=evaluate!, populate=populate!)
+end
+
+function NEAT(cfg::Dict, fitness::Function, fitness_args...)
+    f::Function = i::Individual -> NEAT_fitness(i, fitness, fitness_args...)
+    core_NEAT(cfg, f)
+end
+
+function HyperNEAT(cfg::Dict, fitness::Function, fitness_args...)
+    f::Function = i::Individual -> HyperNEAT_fitness(i, fitness, fitness_args...;cfg=cfg)
+    core_NEAT(cfg, f)
 end

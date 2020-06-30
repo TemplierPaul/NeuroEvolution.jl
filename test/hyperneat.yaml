@@ -11,7 +11,7 @@ save_gen: 5
 innovation_max: 0
 
 # Structure
-n_in: 2
+n_in: 4
 n_out: 1
 start_fully_connected: true
 allow_recurrence: true
@@ -45,13 +45,16 @@ weight_factor: 0.1
 
 # Activation functions
 sigmoid: true
-sin: false
-cos: false
-ReLU: false
-tanh: false
-abs: false
-identity: false
-gauss: false
+sin: true
+cos: true
+ReLU: true
+tanh: true
+abs: true
+identity: true
+gauss: true
 
-# HyperNEAT
-hyperNEAT: false
+# HyperNEAT network parameters
+hyperNEAT: true
+hn_activation: "sigmoid"
+hn_layers: [2, 4, 4, 1]
+hn_link_all_layers: true

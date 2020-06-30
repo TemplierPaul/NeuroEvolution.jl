@@ -49,3 +49,5 @@ include("crossover.jl")
 
 include("species.jl")
 include("run.jl")
+
+include("HyperNEAT.jl")

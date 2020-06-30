@@ -70,3 +70,9 @@ function process(indiv::NEATIndiv, last_features::Array{Array{Float64}})
     end
     out
 end
+
+""
+function NEAT_fitness(indiv::NEATIndiv, fitness::Function, fitness_args...)
+    process_indiv = x -> process(indiv, x)
+    fitness(process_indiv, fitness_args...)
+end

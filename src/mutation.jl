@@ -78,7 +78,10 @@ end
 "Remove a random connection"
 function mutate_disconnect(ind::NEATIndiv, cfg::Dict)
     ind_mut = NEATIndiv(ind)
-    k = rand(collectkeys(ind_mut.genes)) # pick a random gene
+    if length(ind_mut.genes)<=1 # Always keep 1 gene
+        return ind_mut
+    end
+    k = rand(collect(keys(ind_mut.genes))) # pick a random gene
     pop!(ind_mut.genes, k) # remove it
     ind_mut
 end

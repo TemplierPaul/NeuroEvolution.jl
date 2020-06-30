@@ -48,9 +48,21 @@ function NEATIndiv(ind::NEATIndiv)
 end
 
 function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)
+    # N = maximum([length(g1), length(g2)])   # Paper version
+    N = 1 # Implementation version
+
+    # Check for empty genomes
+    if length(i1.genes)==0
+        return cfg["excess_coef"] * length(i2.genes) / N
+    end
+    if length(i2.genes)==0
+        return cfg["excess_coef"] * length(i1.genes) / N
+    end
+
     # Gene innovation numbers in each individual
     g1 = keys(i1.genes)
     g2 = keys(i2.genes)
+
 
     excess = 0.
     disjoint = 0.
@@ -79,11 +91,6 @@ function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)
         end
     end
 
-    # N = maximum([length(g1), length(g2)])   # Paper version
-    N = 1 # Implementation version
-    if N == 0
-        return 0. # Return 0 if none of them has genes (should not happen)
-    end
     dist = cfg["excess_coef"] * excess / N
     dist += cfg["disjoint_coef"] * disjoint / N
 

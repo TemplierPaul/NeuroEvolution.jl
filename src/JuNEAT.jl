@@ -19,7 +19,6 @@ include("crossover.jl")
 include("species.jl")
 include("populate.jl")
 
-include("grid_network.jl")
 include("HyperNEAT.jl")
 
 include("evolution.jl")

@@ -5,29 +5,24 @@ function get_config(filename::String)
 
     cfg["activation_functions"]=[]
 
-    if cfg["sigmoid"]
-        push!(cfg["activation_functions"], sigmoid)
-    end
-    if cfg["ReLU"]
-        push!(cfg["activation_functions"], ReLU)
-    end
-    if cfg["sin"]
-        push!(cfg["activation_functions"], sin)
-    end
-    if cfg["cos"]
-        push!(cfg["activation_functions"], cos)
-    end
-    if cfg["tanh"]
-        push!(cfg["activation_functions"], tanh_activ)
-    end
-    if cfg["abs"]
-        push!(cfg["activation_functions"], abs)
-    end
-    if cfg["identity"]
-        push!(cfg["activation_functions"], identity_activ)
-    end
-    if cfg["gauss"]
-        push!(cfg["activation_functions"], gauss)
+    activ_dict = Dict(
+    "sigmoid"=> sigmoid,
+    "ReLU"=> ReLU,
+    "sin"=> sin,
+    "cos"=> cos,
+    "tanh"=> tanh_activ,
+    "abs"=> abs,
+    "identity"=> identity_activ,
+    "gauss"=> gauss
+    )
+
+    for k in keys(activ_dict)
+        if cfg[k]
+            push!(cfg["activation_functions"], activ_dict[k])
+        end
+        if cfg["hyperNEAT"] && cfg["hn_activation"]==k
+            cfg["hn_activ_func"] = activ_dict[k]
+        end
     end
 
     cfg["Species"]=Dict()

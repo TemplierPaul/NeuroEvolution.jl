@@ -8,6 +8,9 @@ function random_position(origin::Float64, destination::Float64)
     n_min = maximum([0, minimum([origin, destination])])
     n_max = minimum([1, maximum([origin, destination])])
     n = n_min + rand() * (n_max - n_min)
+    if n <=0 || n >=1
+        throw("Invalid neuron position: [$origin, $destination] => [$n_min, $n_max] => $n")
+    end
     n
 end
 

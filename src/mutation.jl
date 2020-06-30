@@ -22,9 +22,15 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
 
     ind_mut = NEATIndiv(ind)
     nb_neur = length(ind_mut.neuron_pos)
+    # println(nb_neur, " ", ind.neuron_pos)
 
-    n_in = cfg["n_in"]
-    n_out = cfg["n_out"]
+    if cfg["hyperNEAT"] # HyperNEAT
+        n_in = 4
+        n_out = 1
+    else # NEAT
+        n_in = cfg["n_in"]
+        n_out = cfg["n_out"]
+    end
 
     # Valid neuron pairs
     valid = trues(nb_neur, nb_neur)
@@ -37,18 +43,18 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
     end
 
 
-    for dest in 1:nb_neur
+    for orig in 1:nb_neur
         # Remove links to self
-        valid[dest, dest]=false
+        valid[orig, orig]=false
 
-         # Remove links towards input neurons
-        for orig in 1:n_in
+         # Remove links towards input neurons and bias neuron
+        for dest in 1:(n_in+1)
             valid[orig, dest]=false
         end
 
         # Remove recurrence if needed
         if !cfg["allow_recurrence"]
-            for orig in dest:nb_neur
+            for dest in 1:orig-1 # Previous neurons
                 valid[orig, dest]=false
             end
         end
@@ -83,8 +89,13 @@ function mutate_disconnect(ind::NEATIndiv, cfg::Dict)
     end
     k = rand(collect(keys(ind_mut.genes))) # pick a random gene
     pop!(ind_mut.genes, k) # remove it
-    n_in = cfg["n_in"]
-    n_out = cfg["n_out"]
+    if cfg["hyperNEAT"] # HyperNEAT
+        n_in = 4
+        n_out = 1
+    else # NEAT
+        n_in = cfg["n_in"]
+        n_out = cfg["n_out"]
+    end
     ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
     ind_mut
 end

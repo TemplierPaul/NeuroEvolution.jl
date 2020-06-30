@@ -77,8 +77,12 @@ end
         println("Max innovation: ", e.cfg["innovation_max"])
         println("Species: ", length(e.cfg["Species"]))
         println("Best(0, 0)= ", y[1])
-        println("\nBest individuals: ", getfield.(best[1:10], :fitness))
-        println("\n\n", best[1])
+        println("\nBest individuals: ", getfield.(best[1:5], :fitness))
+        println("\nConnections in Best: ")
+        for g in values(best[1].genes)
+            println(g.origin, " -- ", g.weight, " -> ", g.destination)
+
+        end
     end
 
 

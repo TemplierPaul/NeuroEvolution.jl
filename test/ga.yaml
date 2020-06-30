@@ -1,0 +1,48 @@
+seed: 0            # evolution seed
+n_genes: 10        # gene length
+d_fitness: 1       # fitness dimension
+n_population: 10   # population size
+n_parents: 2      # parents for sexual reproduction
+n_elite: 2         # elites to carry over each generation
+n_gen: 10          # number of generations
+log_gen: 1         # log every x generations
+save_gen: 10       # save population every x generation
+tournament_size: 3 # tournament size
+p_crossover: 0.3   # crossover probability
+p_mutation: 0.7    # mutation probability
+m_rate: 0.2        # mutation rate
+
+# NEAT
+verbose: false
+n_in: 2
+n_out: 1
+start_fully_connected: true
+allow_recurrence: true
+
+# Innovation
+innovation_max: 0
+
+# Mutation
+p_mutate_add_neuron: 0.01
+p_mutate_add_connection: 0.3
+p_mutate_remove_connection: 0.05
+p_mutate_weights: 0.9
+p_mutate_enabled: 0.1
+p_mut_weights: 0.1
+weight_factor: 0.1
+
+# Activation functions
+sigmoid: true
+sin: false
+cos: false
+ReLU: false
+tanh: false
+abs: false
+identity: false
+gauss: false
+
+# HyperNEAT network parameters
+hyperNEAT: false
+hn_activation: "sigmoid"
+hn_hidden_layers: [4, 4] # List of sizes of hidden layers, in processing order (do NOT include input and output)
+hn_link_all_layers: true

@@ -56,5 +56,6 @@ function crossover(parent1::NEATIndiv, parent2::NEATIndiv, cfg::Dict)
     child.fitness = -Inf .* ones(cfg["d_fitness"])
     child.network = Network(n_in, n_out, Dict())
     child.activ_functions = merge(p2.activ_functions, p1.activ_functions)
+    build!(child)
     child
 end

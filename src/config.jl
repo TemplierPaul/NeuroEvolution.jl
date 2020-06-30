@@ -2,7 +2,6 @@ export get_config
 
 function get_config(filename::String)
     cfg = YAML.load_file(filename)
-
     cfg["activation_functions"]=[]
 
     activ_dict = Dict(

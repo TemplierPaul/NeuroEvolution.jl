@@ -1,4 +1,4 @@
-export Layer, Connection, GridNetwork, height_of
+export Layer, Connection, GridNetwork, HyperNEATIndividual, height_of
 ## Neuron Layer
 
 mutable struct Layer

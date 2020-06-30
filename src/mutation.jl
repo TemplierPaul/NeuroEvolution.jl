@@ -138,16 +138,19 @@ end
 function mutate(ind::NEATIndiv, cfg::Dict)
     # println("mutation")
     if rand() < cfg["p_mutate_add_neuron"]
-        return mutate_neuron(ind, cfg)
+        c =  mutate_neuron(ind, cfg)
     elseif rand() < cfg["p_mutate_add_connection"]
-        return mutate_connect(ind, cfg)
+        c = mutate_connect(ind, cfg)
     elseif rand() < cfg["p_mutate_remove_connection"]
-        return mutate_disconnect(ind, cfg)
+        c = mutate_disconnect(ind, cfg)
     elseif rand() < cfg["p_mutate_weights"]
-        return mutate_weight(ind, cfg)
+        c = mutate_weight(ind, cfg)
     elseif rand() < cfg["p_mutate_enabled"]
-        return mutate_enabled(ind, cfg)
+        c = mutate_enabled(ind, cfg)
+    else
+        # return clone if no mutation occurs
+        c = NEATIndiv(ind)
     end
-    # return clone if no mutation occurs
-    NEATIndiv(ind)
+    build!(c)
+    c
 end

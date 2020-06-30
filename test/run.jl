@@ -66,3 +66,26 @@ end
         println("\n\n", best[1])
     end
 end
+
+@testset "Cambrian.GA x NEAT" begin
+    cfg = get_config("ga.yaml")
+
+    e = GA_NEAT(NEATIndividual, cfg, fitness_xor; id="test")
+    step!(e)
+    @test length(e.population) == cfg["n_population"]
+    run!(e)
+    best = sort(e.population, rev=true)
+
+    X, y = xor_dataset(cfg["n_in"], 100)
+    max_f = sum(log_fitness.(y, y)) / length(X)
+    y_false = []
+    for i in y
+        push!(y_false, 1 .- i)
+    end
+    min_f = sum(log_fitness.(y, y_false)) / length(X)
+    @test best[1].fitness[1] <= max_f
+    @test best[1].fitness[1] > min_f
+
+    y = process(best[1], [1., 1.])
+    @test typeof(y[1])==Float64
+end

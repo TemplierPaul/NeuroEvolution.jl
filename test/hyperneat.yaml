@@ -1,4 +1,4 @@
-verbose: true
+verbose: false
 n_in: 2
 n_out: 1
 

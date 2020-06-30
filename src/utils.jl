@@ -1,4 +1,4 @@
-export random_position
+export random_position, sigmoid
 
 function rand_weight()
     rand() * 2.0 - 1.0 # initial weight is uniformly distributed between -1 and 1

@@ -1,6 +1,7 @@
 cfg = get_config("hyperneat.yaml")
 
 @testset "HyperNEAT Layer" begin
+    cfg = get_config("hyperneat.yaml")
     l = Layer(10, 0., cfg["hn_activ_func"])
     @test l.size == 10
     @test length(l.values)==10
@@ -84,7 +85,28 @@ end
 
         end
     end
+end
 
+@testset "Cambrian.GA x HyperNEAT" begin
+    cfg = get_config("ga.yaml")
+    cfg["hyperneat"]=true
+    cfg["hn_activ_func"]=sigmoid
+    e = GA_NEAT(HyperNEATIndividual, cfg, fitness_xor; id="test")
+    step!(e)
+    @test length(e.population) == cfg["n_population"]
+    run!(e)
+    best = sort(e.population, rev=true)
 
+    X, y = xor_dataset(cfg["n_in"], 100)
+    max_f = sum(log_fitness.(y, y)) / length(X)
+    y_false = []
+    for i in y
+        push!(y_false, 1 .- i)
+    end
+    min_f = sum(log_fitness.(y, y_false)) / length(X)
+    @test best[1].fitness[1] <= max_f
+    @test best[1].fitness[1] > min_f
 
+    y = process(best[1], [1., 1.])
+    @test typeof(y[1])==Float64
 end

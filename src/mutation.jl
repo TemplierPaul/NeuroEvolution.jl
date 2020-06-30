@@ -83,6 +83,9 @@ function mutate_disconnect(ind::NEATIndiv, cfg::Dict)
     end
     k = rand(collect(keys(ind_mut.genes))) # pick a random gene
     pop!(ind_mut.genes, k) # remove it
+    n_in = cfg["n_in"]
+    n_out = cfg["n_out"]
+    ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
     ind_mut
 end
 

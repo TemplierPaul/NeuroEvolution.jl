@@ -1,9 +1,9 @@
-verbose: false
+verbose: true
 
 # Cambrian settings
 d_fitness: 1
-n_population: 20
-n_gen: 5
+n_population: 200
+n_gen: 100
 log_gen: 1
 save_gen: 5
 
@@ -37,7 +37,7 @@ survival_threshold : 0.2
 # Mutation
 p_mutate_add_neuron: 0.01
 p_mutate_add_connection: 0.3
-p_mutate_remove_connection: 0.05
+p_mutate_remove_connection: 0.
 p_mutate_weights: 0.9
 p_mutate_enabled: 0.1
 p_mut_weights: 0.1

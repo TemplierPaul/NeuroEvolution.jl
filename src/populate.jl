@@ -31,7 +31,7 @@ function NEAT_populate!(e::Evolution, selection::Function)
     e.population = new_pop
     if e.cfg["verbose"]
         println("\n", e.gen, " - Pop: ", length(e.population), "  Species: ", length(e.cfg["Species"]), " Inno: ", e.cfg["innovation_max"])
-        println("Best fitness: ", maximum(getfield.(e.population, :fitness)))
+        println("Best fitness: ", maximum(getfield.(e.population, :fitness))[1])
     end
 end
 
@@ -81,7 +81,7 @@ function update_threshold!(cfg::Dict)
     if cfg["verbose"]
         if length(species_pop) > 1
             sort!(species_pop)
-            println("Indiv/species | Mean: ", sum(species_pop)/length(species_pop), " Med: ", species_pop[Integer(floor(length(species_pop)/2))])
+            println("Indiv/species | Mean: ", sum(species_pop)/length(species_pop), " | Med: ", species_pop[Integer(floor(length(species_pop)/2))])
         else
             println("Only 1 species: ", sum(species_pop), " elements")
         end

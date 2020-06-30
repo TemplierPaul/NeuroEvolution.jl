@@ -24,6 +24,8 @@ function NEAT(cfg::Dict, fitness::Function, fitness_args...)
 end
 
 function HyperNEAT(cfg::Dict, fitness::Function, fitness_args...)
+    cfg["n_in"]=4
+    cfg["n_out"]=1
     f::Function = i::Individual -> HyperNEAT_fitness(i, fitness, fitness_args...;cfg=cfg)
     core_NEAT(cfg, f)
 end

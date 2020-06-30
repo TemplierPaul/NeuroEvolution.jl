@@ -36,6 +36,8 @@ function NEAT_populate!(e::Evolution, selection::Function)
 end
 
 function NEAT_evaluate!(e::Evolution, fitness::Function)
+    # Build 
+    build!.(e.population)
     # Assign species
     if length(e.cfg["Species"]) == 0
         s = Species(e.cfg)

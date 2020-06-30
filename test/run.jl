@@ -8,7 +8,7 @@ cfg["save_gen"] = 0
     # test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
     e::Evolution = NEAT(cfg, fitness_xor, cfg["n_in"])
     # @test length(e.population) == cfg["n_population"]
-    @test all(typeof.(e.population) .== NEATIndiv)
+    @test all(typeof.(e.population) .== NEATIndividual)
 end
 
 @testset "Evaluate" begin
@@ -53,6 +53,10 @@ end
     best = sort(e.population, rev=true)
     @test best[1].fitness[1] <= max_f
     @test best[1].fitness[1] > min_f
+
+    y = process(best[1], [1., 1.])
+    @test typeof(y[1])==Float64
+
     if cfg["verbose"]
         println("Final fitness: ", best[1].fitness[1])
         println("Genome size: ", length(best[1].genes))

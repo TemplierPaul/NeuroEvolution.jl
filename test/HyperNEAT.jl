@@ -67,12 +67,20 @@ end
     best = sort(e.population, rev=true)
     @test best[1].fitness[1] <= max_f
     @test best[1].fitness[1] > min_f
+
+    y = process(best[1], [1., 1.])
+    @test typeof(y[1])==Float64
+
     if cfg["verbose"]
         println("Final fitness: ", best[1].fitness[1])
         println("Genome size: ", length(best[1].genes))
         println("Max innovation: ", e.cfg["innovation_max"])
         println("Species: ", length(e.cfg["Species"]))
-        println("\nBest individuals: ", getfield.(best[1:10], :fitness), "\n")
+        println("Best(0, 0)= ", y[1])
+        println("\nBest individuals: ", getfield.(best[1:10], :fitness))
         println("\n\n", best[1])
     end
+
+
+
 end

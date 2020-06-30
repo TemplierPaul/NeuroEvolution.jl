@@ -82,13 +82,8 @@ end
     @test sum(log_loss.(y, y)) < 0.1
 end
 
-function fitness_xor(process_indiv::Function, len::Int64=2)
-    X, y = xor_dataset(len, 100)
-    y_pred = process_indiv(X)
-    [sum(log_fitness.(y, y_pred)) / length(X)]
-end
-
 function fitness_xor(indiv::NEATIndiv, len::Int64=2)
-    process_indiv = x -> indiv.process(indiv, x)
-    fitness_xor(process_indiv, len)
+    X, y = xor_dataset(len, 100)
+    y_pred = process(indiv, X)
+    [sum(log_fitness.(y, y_pred)) / length(X)]
 end

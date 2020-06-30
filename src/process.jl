@@ -1,7 +1,11 @@
 export build!, process
 
 "Create the network from the individual"
-function build!(indiv::NEATIndiv)
+function build!(indiv::NEATIndividual)
+    build_NEAT!(indiv)
+end
+
+function build_NEAT!(indiv::NEATIndiv)
     n_in = Integer(-1 * minimum(indiv.neuron_pos))
     n_out = Integer(maximum(indiv.neuron_pos))
     net = Network(n_in, n_out, Dict())
@@ -40,11 +44,13 @@ function compute!(n::Neuron, neur_dict::Dict)
     n.output = n.activ_func(sum)
 end
 
-"Process one input"
-function process(indiv::NEATIndiv, last_features::Array{Float64})
-    build!(indiv)
+function process(indiv::NEATIndividual, last_features::Array{Float64})
     reset(indiv.network)
+    process_NEAT(indiv, last_features)
+end
 
+"Process one input"
+function process_NEAT(indiv::NEATIndiv, last_features::Array{Float64})
     for p in indiv.neuron_pos
         if p < 0 # Input neurons
             indiv.network.neurons[p].output = last_features[Int(-p)]
@@ -69,10 +75,4 @@ function process(indiv::NEATIndiv, last_features::Array{Array{Float64}})
         push!(out, process(indiv, x))
     end
     out
-end
-
-""
-function NEAT_fitness(indiv::NEATIndiv, fitness::Function, fitness_args...)
-    process_indiv = x -> process(indiv, x)
-    fitness(process_indiv, fitness_args...)
 end

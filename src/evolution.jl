@@ -4,7 +4,7 @@ export NEAT, HyperNEAT
 fitness::Function i::NEATIndiv -> computed_fitness(i)
 """
 
-function core_NEAT(cfg::Dict, fitness::Function)
+function core_NEAT(itype::Type, cfg::Dict, fitness::Function)
     evaluate!::Function = e::Evolution->NEAT_evaluate!(e, fitness)
     selection::Function = i::Array{NEATIndiv} -> i[1]
     if cfg["selection_type"] == "tournament"
@@ -15,17 +15,15 @@ function core_NEAT(cfg::Dict, fitness::Function)
         throw(ArgumentError("Wrong selection type: " + cfg["selection_type"]))
     end
     populate!::Function  = e::Evolution->NEAT_populate!(e, selection)
-    Evolution(NEATIndiv, cfg; evaluate=evaluate!, populate=populate!)
+    Evolution(itype, cfg; evaluate=evaluate!, populate=populate!)
 end
 
 function NEAT(cfg::Dict, fitness::Function, fitness_args...)
-    f::Function = i::Individual -> NEAT_fitness(i, fitness, fitness_args...)
-    core_NEAT(cfg, f)
+    f::Function = i::NEATIndividual -> fitness(i, fitness_args...)
+    core_NEAT(NEATIndividual, cfg, f)
 end
 
 function HyperNEAT(cfg::Dict, fitness::Function, fitness_args...)
-    cfg["n_in"]=4
-    cfg["n_out"]=1
-    f::Function = i::Individual -> HyperNEAT_fitness(i, fitness, fitness_args...;cfg=cfg)
-    core_NEAT(cfg, f)
+    f::Function = i::HyperNEATIndividual -> fitness(i, fitness_args...)
+    core_NEAT(HyperNEATIndividual, cfg, f)
 end

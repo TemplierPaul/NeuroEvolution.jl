@@ -1,6 +1,8 @@
-export NEATIndiv, distance
+export NEATIndiv, NEATIndividual, distance
 
-mutable struct NEATIndiv <: Cambrian.Individual
+abstract type NEATIndiv <: Cambrian.Individual end
+
+mutable struct NEATIndividual <: NEATIndiv
     genes::Dict
     fitness::Array{Float64}
     neuron_pos::Array{Float64}
@@ -9,6 +11,10 @@ mutable struct NEATIndiv <: Cambrian.Individual
 end
 
 function NEATIndiv(cfg::Dict)
+    NEATIndividual(cfg)
+end
+
+function NEATIndividual(cfg::Dict)
     n_in = cfg["n_in"]
     n_out = cfg["n_out"]
     neuron_pos::Array{Float64}=[]
@@ -40,7 +46,7 @@ function NEATIndiv(cfg::Dict)
 
     network = Network(n_in, n_out, Dict())
 
-    NEATIndiv(genes, fitness, neuron_pos, network, activ_functions)
+    NEATIndividual(genes, fitness, neuron_pos, network, activ_functions)
 end
 
 function NEATIndiv(ind::NEATIndiv)

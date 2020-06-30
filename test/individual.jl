@@ -12,11 +12,12 @@ end
 @testset "Individual" begin
     n_in = cfg["n_in"]
     n_out = cfg["n_out"]
-    ind = NEATIndiv(cfg)
+    ind = NEATIndividual(cfg)
     test_indiv(ind, cfg)
     @test cfg["innovation_max"]==n_in * n_out
 
     ind2 = NEATIndiv(ind)
+    @test typeof(ind2) == NEATIndividual
     test_indiv(ind2, cfg)
     @test cfg["innovation_max"]==n_in * n_out
 

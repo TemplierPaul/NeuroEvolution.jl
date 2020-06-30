@@ -141,13 +141,59 @@ end
 
 ## HyperNEAT fitness transformator
 
-"Creates a wrapper for the fitness, so the HyperNEAT_fitness can be used transparently in NEAT"
-function HyperNEAT_fitness(indiv::NEATIndiv, fitness::Function, fitness_args...; cfg::Dict)
-    net = GridNetwork(cfg)
+mutable struct HyperNEATIndividual <: NEATIndiv
+    genes::Dict
+    fitness::Array{Float64}
+    neuron_pos::Array{Float64}
+    network::Network
+    activ_functions::Dict
+    hn_net::GridNetwork
+end
+
+function HyperNEATIndividual(cfg::Dict)
+    n_in = 4
+    n_out = 1
+    neuron_pos::Array{Float64}=[]
+
+    # Neuron positions: Input and output
+    neuron_pos = -n_in:n_out
+
+    # Neurons activation functions
+    activ_functions = Dict()
+    for i in neuron_pos
+        activ_functions[i]=rand(cfg["activation_functions"])
+    end
+
+    # Add genes
+    genes=Dict()
+    if cfg["start_fully_connected"]
+        for i in 1:n_in
+            for j in 1:n_out
+                inno = i * n_out + j
+                genes[inno] = Gene(-1.0 * i, 1.0 * j, inno)
+            end
+        end
+        cfg["innovation_max"] = maximum([cfg["innovation_max"], n_in * n_out])
+    end
+
+    sort!(neuron_pos)
+
+    fitness = -Inf .* ones(cfg["d_fitness"])
+
+    neat_network = Network(n_in, n_out, Dict())
+    grid_net = GridNetwork(cfg)
+
+    HyperNEATIndividual(genes, fitness, neuron_pos, neat_network, activ_functions, grid_net)
+end
+
+function build!(indiv::HyperNEATIndividual)
+    reset(indiv.network)
+    build_NEAT!(indiv)
     # Network generator function
-    generator::Function = x -> process(indiv, x)
-    set_weights!(net, generator)
-    # Evaluation of the produced network
-    process_indiv = x -> process(net, x)
-    fitness(process_indiv, fitness_args...)
+    generator::Function = x -> process_NEAT(indiv, x)
+    set_weights!(indiv.hn_net, generator)
+end
+
+function process(indiv::HyperNEATIndividual, last_features::Array{Float64})
+    process(indiv.hn_net, last_features)
 end

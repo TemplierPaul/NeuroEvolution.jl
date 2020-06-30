@@ -1,6 +1,7 @@
 cfg = get_config("test.yaml")
 
 function test_process(ind::NEATIndiv, cfg::Dict)
+    build!(ind)
     x = rand_bin(cfg["n_in"])
     y = process(ind, x)
     @test length(y)==cfg["n_out"]
@@ -35,6 +36,7 @@ end
 
     cfg["n_out"]=1
     ind = NEATIndiv(cfg)
+    build!(ind)
     # Processing an array of inputs
     X, Y = xor_dataset(n_in, 100)
     y = process(ind, X)

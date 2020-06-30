@@ -1,9 +1,9 @@
-verbose: true
+verbose: false
 
 # Cambrian settings
 d_fitness: 1
-n_population: 200
-n_gen: 100
+n_population: 20
+n_gen: 10
 log_gen: 1
 save_gen: 5
 

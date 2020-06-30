@@ -1,4 +1,4 @@
-cfg_control = get_config("test.yaml")
+cfg_control = get_config("../cfg/test.yaml")
 cfg["n_out"]=1
 
 ind = NEATIndiv(cfg)
@@ -6,7 +6,7 @@ ind_control = NEATIndiv(ind)
 @test test_identical(ind, ind_control)
 
 @testset "Mutation Weight" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     cfg["n_out"]=1
     cfg["p_mut_weights"]=1
     ind_mut = mutate_weight(ind, cfg)
@@ -16,7 +16,7 @@ ind_control = NEATIndiv(ind)
 end
 
 @testset "Mutation Add connection" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     cfg["n_out"]=1
     ind_mut = mutate_connect(ind, cfg)
     @test test_identical(ind, ind_control)
@@ -47,7 +47,7 @@ end
 end
 
 @testset "Mutation Add neuron" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     cfg["n_out"]=1
     ind_mut = mutate_neuron(ind, cfg)
     @test test_identical(ind, ind_control)
@@ -57,7 +57,7 @@ end
 end
 
 @testset "Mutation Enable" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     cfg["n_out"]=1
     ind_mut = mutate_enabled(ind, cfg)
     @test test_identical(ind, ind_control)
@@ -71,7 +71,7 @@ end
 end
 
 @testset "Mutation" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     cfg["n_out"]=1
     cfg["p_mutate_enabled"] = 1 # Ensure there is a mutation
     cfg["p_mut_weights"]=1 # Ensure weights mutation really happens

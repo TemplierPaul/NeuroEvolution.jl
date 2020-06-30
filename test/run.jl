@@ -1,4 +1,4 @@
-cfg = get_config("test.yaml")
+cfg = get_config("../cfg/test.yaml")
 cfg["n_out"] = 1
 cfg["n_in"] = 2
 cfg["log_gen"] = 0
@@ -19,7 +19,7 @@ end
 end
 
 @testset "Populate" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
     # test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
     e::Evolution = NEAT(cfg, fitness_xor, cfg["n_in"])
     e.evaluate(e)
@@ -28,7 +28,7 @@ end
 end
 
 @testset "NEAT on XOR" begin
-    cfg = get_config("test.yaml")
+    cfg = get_config("../cfg/test.yaml")
 
     # Run evolution
     # test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
@@ -68,7 +68,7 @@ end
 end
 
 @testset "Cambrian.GA x NEAT" begin
-    cfg = get_config("ga.yaml")
+    cfg = get_config("../cfg/ga.yaml")
 
     e = GA_NEAT(NEATIndividual, cfg, fitness_xor; id="test")
     step!(e)

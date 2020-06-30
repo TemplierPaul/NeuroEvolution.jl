@@ -1,4 +1,4 @@
-cfg = get_config("test.yaml")
+cfg = get_config("../cfg/test.yaml")
 
 @testset "Crossover" begin
     p1 = NEATIndiv(cfg)

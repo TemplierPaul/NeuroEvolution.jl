@@ -1,4 +1,4 @@
-cfg = get_config("test.yaml")
+cfg = get_config("../cfg/test.yaml")
 
 function test_indiv(ind::NEATIndiv, cfg::Dict)
     n_in = cfg["n_in"]

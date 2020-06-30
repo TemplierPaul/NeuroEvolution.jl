@@ -14,6 +14,9 @@ function random_position(origin::Float64, destination::Float64)
     n
 end
 
+
+## Activation functions
+
 function sigmoid(x::Float64)
     1 / (1 + exp(-5*x))
 end

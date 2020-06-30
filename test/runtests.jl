@@ -50,4 +50,6 @@ include("crossover.jl")
 include("species.jl")
 include("run.jl")
 
+include("save_load.jl")
+
 include("HyperNEAT.jl")

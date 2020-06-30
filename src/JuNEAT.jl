@@ -13,6 +13,8 @@ include("NEAT_network.jl")
 include("individual.jl")
 include("process.jl")
 
+include("loader.jl")
+
 include("mutation.jl")
 include("crossover.jl")
 

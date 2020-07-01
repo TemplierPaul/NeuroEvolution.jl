@@ -1,4 +1,4 @@
-module JuNEAT
+module NeuroEvolution
 
 using Cambrian
 using YAML

@@ -41,8 +41,8 @@ function GA_NEAT(itype::Type, cfg::Dict, fitness::Function; kwargs...)
 
     # Force NEAT mutation and crossover operators
     function neat_ga_populate!(e::Evolution)
-        mut::Function = i::NEATIndiv -> JuNEAT.mutate(i, e.cfg)
-        cross::Function = (p1, p2) -> JuNEAT.crossover(p1, p2, e.cfg)
+        mut::Function = i::NEATIndiv -> NeuroEvolution.mutate(i, e.cfg)
+        cross::Function = (p1, p2) -> NeuroEvolution.crossover(p1, p2, e.cfg)
         Cambrian.ga_populate!(e, mutation = mut, crossover = cross)
     end
 

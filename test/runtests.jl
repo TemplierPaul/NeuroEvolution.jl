@@ -1,4 +1,4 @@
-using JuNEAT
+using NeuroEvolution
 using Cambrian
 using Test
 

@@ -134,8 +134,8 @@ end
 function GA_NEAT_populate!(e; args...)
     Cambrian.ga_populate(
         e,
-        mutation = JuNEAT.mutate,
-        crossover = JuNEAT.crossover,
+        mutation = NeuroEvolution.mutate,
+        crossover = NeuroEvolution.crossover,
         selection = x ->
             tournament_selection(x, e.cfg["tournament_size"]),
     )

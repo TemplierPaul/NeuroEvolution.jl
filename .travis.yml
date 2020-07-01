@@ -8,3 +8,5 @@ os:
   # - osx
 notifications:
   email: false
+install:
+  - julia -e 'using Pkg; pkg"add https://github.com/d9w/Cambrian.jl"; Pkg.build(); Pkg.test(coverage=true);'

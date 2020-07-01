@@ -9,4 +9,8 @@ os:
 notifications:
   email: false
 install:
+<<<<<<< HEAD
   - julia -e 'using Pkg; pkg"add https://github.com/d9w/Cambrian.jl"; Pkg.build(); '
+=======
+  - julia -e 'using Pkg; pkg"add https://github.com/d9w/Cambrian.jl"; Pkg.build();'
+>>>>>>> c4119f62acc66e1aa73dce0ba81261f8b28b7e9d

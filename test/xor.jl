@@ -30,26 +30,6 @@ function xor_dataset(len::Int64, n_records::Int64)
     X, y
 end
 
-@testset "XOR data generator" begin
-    a = rand_bin(20)
-    @test length(a) == 20
-    @test all(a.<=1)
-    @test all(a.>=0)
-    @test all(typeof.(a) .== Float64)
-
-    b = xor(a)
-    @test all(typeof.(b) .== Float64)
-    @test length(b) == 1
-
-    X, y = xor_dataset(20, 100)
-    @test length(X)==100
-    @test length(y)==100
-    @test length(X[1])==20
-    @test all(typeof.(y[1]) .== Float64)
-
-    @test all(xor.(X) .== y)
-end
-
 function log_loss(y_true::Float64, y_pred::Float64)
     y_pred = maximum([minimum([y_pred, 1-10^-15]), 10^-15])
     if y_true == 1.0
@@ -70,16 +50,6 @@ end
 function log_fitness(y_true, y_pred)
     max_loss = log_loss(y_true, 1 .- y_true)
     max_loss - log_loss(y_true, y_pred)
-end
-
-@testset "Log Loss" begin
-    @test log_loss(0, 0) < 0.01
-    @test log_loss(0, 1) > 0
-    @test log_loss(1, 1) < 0.01
-    @test log_loss(1, 0) > 0
-
-    X, y = xor_dataset(20, 100)
-    @test sum(log_loss.(y, y)) < 0.1
 end
 
 function fitness_xor(indiv::NEATIndiv, len::Int64=2)

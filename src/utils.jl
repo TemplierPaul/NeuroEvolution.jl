@@ -1,4 +1,4 @@
-export random_position, sigmoid
+export random_position, get_name, sigmoid, activ_dict
 
 function rand_weight()
     rand() * 2.0 - 1.0 # initial weight is uniformly distributed between -1 and 1
@@ -8,7 +8,7 @@ function random_position(origin::Float64, destination::Float64)
     n_min = maximum([0, minimum([origin, destination])])
     n_max = minimum([1, maximum([origin, destination])])
     n = n_min + rand() * (n_max - n_min)
-    if n <=0 || n >=1
+    if n <= 0 || n >= 1
         throw("Invalid neuron position: [$origin, $destination] => [$n_min, $n_max] => $n")
     end
     n
@@ -18,11 +18,11 @@ end
 ## Activation functions
 
 function sigmoid(x::Float64)
-    1 / (1 + exp(-5*x))
+    1 / (1 + exp(-5 * x))
 end
 
 function ReLU(x::Float64)
-    if x <0
+    if x < 0
         0
     else
         x
@@ -40,3 +40,14 @@ end
 function tanh_activ(x::Float64)
     tanh(2.5 * x)
 end
+
+activ_dict = Dict(
+    "sigmoid" => sigmoid,
+    "ReLU" => ReLU,
+    "sin" => sin,
+    "cos" => cos,
+    "tanh" => tanh_activ,
+    "abs" => abs,
+    "identity" => identity_activ,
+    "gauss" => gauss,
+)

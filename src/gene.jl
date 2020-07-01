@@ -16,3 +16,13 @@ end
 function Gene(g::Gene)
     deepcopy(g)
 end
+
+function Gene(d::Dict{String,Any})
+    Gene(
+        d["inno_nb"],
+        d["origin"],
+        d["destination"],
+        d["weight"],
+        d["enabled"],
+    )
+end

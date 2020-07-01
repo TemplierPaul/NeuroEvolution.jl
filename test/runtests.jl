@@ -40,8 +40,10 @@ function test_identical(ind::NEATIndiv, ind2::NEATIndiv)
     same
 end
 
+
+include("save_load.jl")
+include("test_xor.jl")
 include("individual.jl")
-include("xor.jl")
 
 include("network.jl")
 include("mutation.jl")
@@ -49,7 +51,5 @@ include("crossover.jl")
 
 include("species.jl")
 include("run.jl")
-
-include("save_load.jl")
 
 include("HyperNEAT.jl")

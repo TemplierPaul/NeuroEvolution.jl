@@ -187,6 +187,12 @@ function HyperNEATIndividual(cfg::Dict)
     HyperNEATIndividual(genes, fitness, neuron_pos, neat_network, activ_functions, grid_net)
 end
 
+function HyperNEATIndividual(cfg::Dict, s::String)
+	NEATIndiv(cfg, s)
+end
+
+## Build / process
+
 function build!(indiv::HyperNEATIndividual)
     reset(indiv.network)
     build_NEAT!(indiv)

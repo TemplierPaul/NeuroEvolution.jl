@@ -107,8 +107,53 @@ function distance(i1::NEATIndiv, i2::NEATIndiv, cfg::Dict)
     dist
 end
 
-function Base.show(io::IO, ::MIME"text/plain", indiv::NEATIndiv)
-    for fname in fieldnames(indiv)
-        println(io, getfield(indiv, fname))
-    end
+function parse_fitness(s::String)
+	if s == "-Inf"
+		-Inf
+	else
+		parse(Float64, s)
+	end
+end
+
+function NEATIndiv(cfg::Dict, s::String)
+	n_in = cfg["n_in"]
+	n_out = cfg["n_out"]
+
+	dict = JSON.parse(s)
+
+	fitness=parse_fitness.(dict["Fitness"])
+
+	# Genes
+	genes = Dict()
+	neuron_pos::Array{Float64}= 1.0 .* (-n_in:n_out)
+	for (k, v) in pairs(dict["Genes"])
+		g = Gene(v)
+		genes[parse(Float64, k)] = g
+		if !(g.origin in neuron_pos)
+			push!(neuron_pos, g.origin)
+		end
+		# Add out_neuron if not already in
+		if !(g.destination in neuron_pos)
+			push!(neuron_pos, g.destination)
+		end
+	end
+
+	# Activation functions
+	activ_functions = Dict()
+	for (k, v) in pairs(dict["Activ_func"])
+		activ_functions[parse(Float64, k)] = activ_dict[v]
+	end
+
+	network = Network(n_in, n_out, Dict())
+
+	if dict["Type"]=="NEAT"
+		ind = NEATIndividual(genes, fitness, neuron_pos, network, activ_functions)
+	elseif dict["Type"]=="HyperNEAT"
+		grid_net = GridNetwork(cfg)
+		ind = HyperNEATIndividual(genes, fitness, neuron_pos, network, activ_functions, grid_net)
+	end
+end
+
+function NEATIndividual(cfg::Dict, s::String)
+	NEATIndiv(cfg, s)
 end

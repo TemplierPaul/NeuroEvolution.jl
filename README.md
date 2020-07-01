@@ -7,7 +7,7 @@
 Julia implementation of NEAT-based neuroevolution algorithms including;
 - [NeuroEvolution of Augmenting Topologies](http://nn.cs.utexas.edu/downloads/papers/stanley.cec02.pdf) (NEAT) 
 - [Compositional Pattern-Producing Network](http://eplex.cs.ucf.edu/papers/stanley_gpem07.pdf) (CPPN) 
-- [Hypercube-based NEAT](https://stars.library.ucf.edu/facultybib2000/2178/) (HyperNEAT) \
+- [Hypercube-based NEAT](https://stars.library.ucf.edu/facultybib2000/2178/) (HyperNEAT)
 
 using the [Cambrian](https://github.com/d9w/Cambrian.jl) library.
 

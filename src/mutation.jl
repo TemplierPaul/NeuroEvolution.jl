@@ -60,8 +60,8 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
         end
     end
 
-    # TODO solve issue with links between 2 output neurons:
-    # recurrence depends on output order
+    ind_mut.fitness.= -Inf
+    ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
 
     # Filter invalid ones
     conns = findall(valid)
@@ -71,13 +71,14 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
 
         i = ind.neuron_pos[conns[1][1]]
         j = ind.neuron_pos[conns[1][2]]
+        if j <= 0 # Catching error where destination is an input
+            return ind_mut # Refuse mutation
+        end
 
         g = Gene(i, j, cfg["innovation_max"])
 
         ind_mut.genes[cfg["innovation_max"]]=g
-        ind_mut.network = Network(n_in, n_out, Dict()) # Reset network
     end
-    ind_mut.fitness.= -Inf
     ind_mut
 end
 

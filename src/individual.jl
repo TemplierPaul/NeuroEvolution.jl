@@ -137,6 +137,7 @@ function NEATIndiv(cfg::Dict, s::String)
 			push!(neuron_pos, g.destination)
 		end
 	end
+	sort!(neuron_pos)
 
 	# Activation functions
 	activ_functions = Dict()

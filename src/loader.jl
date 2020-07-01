@@ -38,7 +38,7 @@ function Base.string(indiv::HyperNEATIndividual)
     d = Dict(
 	"Type"=>"HyperNEAT",
     "Genes"=>indiv.genes,
-    "Fitness"=>indiv.fitness,
+    "Fitness"=>fitness_value.(indiv.fitness),
     "Activ_func"=>get_name(indiv.activ_functions)
     )
     JSON.json(d)

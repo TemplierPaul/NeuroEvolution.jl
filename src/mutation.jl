@@ -47,14 +47,23 @@ function mutate_connect(ind::NEATIndiv, cfg::Dict)
         # Remove links to self
         valid[orig, orig]=false
 
-         # Remove links towards input neurons and bias neuron
-        for dest in 1:(n_in+1)
-            valid[orig, dest]=false
-        end
+        orig_pos = ind.neuron_pos[orig]
 
-        # Remove recurrence if needed
-        if !cfg["allow_recurrence"]
-            for dest in 1:orig-1 # Previous neurons
+        for dest in 1:nb_neur
+            dest_pos = ind.neuron_pos[dest]
+
+            # Remove links towards input neurons and bias neuron
+            if dest_pos <= 0
+                valid[orig, dest]=false
+            end
+
+            # Remove links between output neurons (would not support adding a neuron)
+            if orig_pos >= 1 && dest_pos >= 1
+                valid[orig, dest]=false
+            end
+
+            # Remove recurrence if needed
+            if !cfg["allow_recurrence"] && orig_pos > dest_pos
                 valid[orig, dest]=false
             end
         end

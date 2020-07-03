@@ -1,4 +1,4 @@
-export NEAT_populate!, NEAT_evaluate!, GA_NEAT_populate!
+export NEAT_populate!, NEAT_evaluate!, GA_NEAT_populate!, NEAT_tournament, NEAT_random_top
 
 function NEAT_tournament(pop::Array{NEATIndiv}, t_size::Int)
     if length(pop) == 1

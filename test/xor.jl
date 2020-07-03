@@ -1,4 +1,4 @@
-export xor, log_loss, log_fitness, fitness_xor
+export xor, log_loss, log_fitness, fitness_xor, xor_dataset
 
 function xor(a::Float64, b::Float64)
     if a + b == 1

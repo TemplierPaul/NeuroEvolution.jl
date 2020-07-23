@@ -20,9 +20,13 @@ function NEAT_populate!(e::Evolution, selection::Function)
     # println("\n-------\nTotal fitness: ", e.cfg["total_fitness"], " Pop: ", length(e.population))
     for s in values(e.cfg["Species"])
         # println("\nFitness: ", s.fitness_val, " Members: ", length(s.members))
-        nb_offspring = Integer(round(
-            length(e.population) * s.fitness_val / e.cfg["total_fitness"],
-        ))
+        if e.cfg["total_fitness"] <= 0
+            nb_offspring = Integer(round(
+                length(e.population) * s.fitness_val / e.cfg["total_fitness"],
+            ))
+        else
+            nb_offspring = length(s.members) #Same species size
+        end
         # println("Children: ", nb_offspring)
         reproduction!(s, selection, nb_offspring, e.cfg)
         append!(new_pop, s.members)

@@ -1,6 +1,6 @@
 language: julia
 codecov: true
-coveralls: true
+coveralls: false
 julia:
   - 1.4
 os:

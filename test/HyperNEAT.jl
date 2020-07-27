@@ -27,17 +27,31 @@ end
 end
 
 @testset "HyperNEAT Network" begin
+    # All possible connections
+    cfg["hn_link_all_layers"]= true
     net = GridNetwork(cfg)
     @test length(net.layers)==length(cfg["hn_hidden_layers"])+2
-    if cfg["hn_link_all_layers"]
-        @test length(net.connections)==factorial(length(cfg["hn_hidden_layers"])+1)
-    else
-        @test length(net.connections)==length(cfg["hn_hidden_layers"])+1
-    end
+    @test length(net.connections)==factorial(length(cfg["hn_hidden_layers"])+1)
     X = zeros(cfg["n_in"]) .+ 1
     y = process(net, X)
     @test length(y) == cfg["n_out"]
     @test !all(y .== 0.)
+    for c in net.connections
+        @test c.layer_from.depth < c.layer_to.depth
+    end
+
+    # Only feed-forward
+    cfg["hn_link_all_layers"]= false
+    net = GridNetwork(cfg)
+    @test length(net.layers)==length(cfg["hn_hidden_layers"])+2
+    @test length(net.connections)==length(cfg["hn_hidden_layers"])+1
+    X = zeros(cfg["n_in"]) .+ 1
+    y = process(net, X)
+    @test length(y) == cfg["n_out"]
+    @test !all(y .== 0.)
+    for c in net.connections
+        @test c.layer_from.depth < c.layer_to.depth
+    end
 end
 
 @testset "HyperNEAT Evaluate" begin

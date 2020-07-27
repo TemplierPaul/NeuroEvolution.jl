@@ -37,7 +37,7 @@ end
 end
 
 @testset "Load population" begin
-    println("Test deactivated for external testing purposes")
+    println("Load test deactivated for external testing purposes")
     # e = NEAT(cfg, fitness_xor, cfg["n_in"])
     # load_gen!(e, "$id/0001")
     # @test all(getfield.(e.population, :fitness) .!= [-Inf])

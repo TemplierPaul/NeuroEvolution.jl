@@ -86,10 +86,12 @@ function GridNetwork(cfg::Dict)
     layers_size = [cfg["n_in"]]
     append!(layers_size, cfg["hn_hidden_layers"])
     push!(layers_size, cfg["n_out"])
+    # Add the neuron layers
     for i in 1:length(layers_size)
         depth = normalize(i, length(layers_size))
         push!(layers, Layer(layers_size[i], depth, cfg["hn_activ_func"]))
     end
+    # Add connextions between layers
     connections::Array{Connection} = []
     for j in 2:length(layers) # Layer_to
         if cfg["hn_link_all_layers"] # Connect from all previous layers
@@ -97,7 +99,7 @@ function GridNetwork(cfg::Dict)
                 push!(connections, Connection(layers[i], layers[j]))
             end
         else # Only connect from previous layer
-            push!(connections, Connection(layers[i], layers[i-1]))
+            push!(connections, Connection(layers[j-1], layers[j]))
         end
     end
     # println("Network ", getfield.(layers, :size))

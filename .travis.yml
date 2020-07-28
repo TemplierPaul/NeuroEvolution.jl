@@ -9,6 +9,6 @@ os:
 notifications:
   slack:
     rooms:
-    - perso-s0z5415:3tqMuSKvjGVxMx027X7hOOhu#NeuroEvo
+    - perso-s0z5415:3tqMuSKvjGVxMx027X7hOOhu#neuroevo
 install:
   - julia -e 'using Pkg; pkg"add https://github.com/d9w/Cambrian.jl"; Pkg.build();'

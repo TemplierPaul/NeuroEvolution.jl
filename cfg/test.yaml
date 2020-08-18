@@ -28,6 +28,7 @@ target_species_number: 10
 species_max: 0
 use_max_fitness: false
 p_mutate_only: 0.1 # Reproduction
+elites: 2
 
 # selection
 selection_type: "random_top" # 'tournament' or 'random_top'

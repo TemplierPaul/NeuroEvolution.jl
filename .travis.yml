@@ -9,7 +9,11 @@ os:
 notifications:
   slack:
     rooms:
+<<<<<<< HEAD
     - perso-s0z5415:3tqMuSKvjGVxMx027X7hOOhu#BERL
   email: false
+=======
+    - perso-s0z5415:3tqMuSKvjGVxMx027X7hOOhu#neuroevo
+>>>>>>> 179b0b6c357b0ca5045296f43fba16ebe464c7fc
 install:
   - julia -e 'using Pkg; pkg"add https://github.com/d9w/Cambrian.jl"; Pkg.build();'

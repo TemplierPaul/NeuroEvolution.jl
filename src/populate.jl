@@ -18,9 +18,9 @@ function NEAT_populate!(e::Evolution, selection::Function)
     # Create offsprings and add to the population
     new_pop::Array{NEATIndiv} = []
     if e.cfg["elites"]>0
-        sort!(pop, by = x -> x.fitness, rev = true)
+        sort!(e.population, by = x -> x.fitness, rev = true)
         for i in 1:e.cfg["elites"]
-            push!(new_pop, pop[i])
+            push!(new_pop, e.population[i])
         end
     end
     # println("\n-------\nTotal fitness: ", e.cfg["total_fitness"], " Pop: ", length(e.population))

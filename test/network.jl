@@ -1,4 +1,4 @@
-cfg = get_config("../cfg/test.yaml")
+cfg = NeuroEvolution.get_config("../cfg/test.yaml")
 
 function test_process(ind::NEATIndiv, cfg::Dict)
     build!(ind)

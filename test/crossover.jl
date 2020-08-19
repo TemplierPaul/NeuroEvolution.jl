@@ -1,4 +1,4 @@
-cfg = get_config("../cfg/test.yaml")
+cfg = NeuroEvolution.get_config("../cfg/test.yaml")
 
 @testset "Crossover" begin
     p1 = NEATIndiv(cfg)

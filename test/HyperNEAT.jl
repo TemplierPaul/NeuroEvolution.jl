@@ -1,7 +1,7 @@
-cfg = get_config("../cfg/hyperneat.yaml")
+cfg = NeuroEvolution.get_config("../cfg/hyperneat.yaml")
 
 @testset "HyperNEAT Layer" begin
-    cfg = get_config("../cfg/hyperneat.yaml")
+    cfg = NeuroEvolution.get_config("../cfg/hyperneat.yaml")
     l = Layer(10, 0., cfg["hn_activ_func"])
     @test l.size == 10
     @test length(l.values)==10
@@ -61,7 +61,7 @@ end
 end
 
 @testset "HyperNEAT run" begin
-    cfg = get_config("../cfg/hyperneat.yaml")
+    cfg = NeuroEvolution.get_config("../cfg/hyperneat.yaml")
 
     e = HyperNEAT(cfg, fitness_xor, 2)
     Cambrian.run!(e)
@@ -102,7 +102,7 @@ end
 end
 
 @testset "Cambrian.GA x HyperNEAT" begin
-    cfg = get_config("../cfg/ga.yaml")
+    cfg = NeuroEvolution.get_config("../cfg/ga.yaml")
     cfg["hyperneat"]=true
     cfg["hn_activ_func"]=sigmoid
     e = GA_NEAT(HyperNEATIndividual, cfg, fitness_xor; id="test")

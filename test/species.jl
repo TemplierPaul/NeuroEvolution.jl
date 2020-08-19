@@ -1,4 +1,4 @@
-cfg = get_config("../cfg/test.yaml")
+cfg = NeuroEvolution.get_config("../cfg/test.yaml")
 
 @testset "Species" begin
     @test typeof(cfg["Species"])==Dict{Any,Any}

@@ -3,7 +3,7 @@ using Cambrian
 using JSON
 include("xor.jl")
 
-cfg = get_config("../cfg/test.yaml")
+cfg = NeuroEvolution.get_config("../cfg/test.yaml")
 id = "011fc676-b63a-438a-a19a-4c9fc91a052b"
 
 @testset "Save / Load NEATIndividual" begin
@@ -17,7 +17,7 @@ id = "011fc676-b63a-438a-a19a-4c9fc91a052b"
 end
 
 @testset "Save / Load HyperNEATIndividual" begin
-    hn_cfg = get_config("../cfg/hyperneat.yaml")
+    hn_cfg = NeuroEvolution.get_config("../cfg/hyperneat.yaml")
     ind = HyperNEATIndividual(hn_cfg)
     build!(ind)
     s = string(ind)

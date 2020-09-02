@@ -69,9 +69,9 @@ function compute_fitness_mean!(s::Species, fitness::Function)
     s_size = length(s.members) # Species size
     total_fit = 0
     for i in s.members
-        f = fitness(i) ./s_size # Explicit fitness sharing
+        f = fitness(i)
         i.fitness .=  f
-        total_fit += f[1] # Compute total adjusted fitness in species
+        total_fit += f[1]/s_size # Compute total adjusted fitness in species
     end
 
     s.fitness_val = total_fit /s_size # Compute average adjusted fitness in species
@@ -88,10 +88,11 @@ function compute_fitness_max!(s::Species, fitness::Function)
     s.fitness_val = 0
     total_fit = 0
     for i in s.members
-        f = fitness(i) ./ s_size # Explicit fitness sharing
+        f = fitness(i)
         i.fitness .=  f
-        s.fitness_val = maximum([s.fitness_val, f[1]])  # Compute max adjusted fitness in species
-        total_fit += f[1]
+        # Explicit fitness sharing computed for the species only
+        s.fitness_val = maximum([s.fitness_val, f[1]/s_size])  # Compute max adjusted fitness in species
+        total_fit += f[1]/s_size 
     end
     s.fitness_val
 end

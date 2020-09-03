@@ -29,13 +29,13 @@ end
 
 @testset "NEAT on XOR" begin
     cfg = NeuroEvolution.get_config("../cfg/test.yaml")
-
+    cfg["verbose"]=true
     # Run evolution
     # test_fitness::Function = x::NEATIndiv -> fitness_xor(x, cfg["n_in"])
     e = NEAT(cfg, fitness_xor, cfg["n_in"])
     Cambrian.run!(e)
 
-    # @test length(e.population) == cfg["n_population"]
+    @test length(e.population) <= 1.1 * cfg["n_population"]
 
     X, y = xor_dataset(cfg["n_in"], 100)
     max_f = sum(log_fitness.(y, y)) / length(X)
@@ -59,6 +59,7 @@ end
 
     if cfg["verbose"]
         println("Final fitness: ", best[1].fitness[1])
+        println("Population size: ", length(e.population))
         println("Genome size: ", length(best[1].genes))
         println("Max innovation: ", e.cfg["innovation_max"])
         println("Species: ", length(e.cfg["Species"]))

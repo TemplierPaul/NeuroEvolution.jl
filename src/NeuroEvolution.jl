@@ -6,6 +6,8 @@ using JSON
 using Random
 using Formatting
 
+println("NE.jl v0.1")
+
 include("utils.jl")
 include("config.jl")
 

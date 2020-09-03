@@ -28,7 +28,7 @@ function NEAT_populate!(e::Evolution, selection::Function)
         # println("\nFitness: ", s.fitness_val, " Members: ", length(s.members))
         if e.cfg["total_fitness"] > 0
             nb_offspring = Integer(round(
-                length(e.population) * s.fitness_val / e.cfg["total_fitness"],
+                e.cfg["n_population"] * s.fitness_val / e.cfg["total_fitness"],
             ))
         else
             nb_offspring = length(s.members) #Same species size
